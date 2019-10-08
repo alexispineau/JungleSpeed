@@ -1,3 +1,5 @@
+package server;
+
 import java.rmi.*;
 
 public interface Information extends Remote {

@@ -1,8 +1,12 @@
+package server;
+
+import server.Information;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 
-public class InformationImpl extends UnicastRemoteObject implements Information{
+public class InformationImpl extends UnicastRemoteObject implements Information {
     private static final long serialVersionUID = 2674880711467464646L;
 
     protected InformationImpl() throws RemoteException {
