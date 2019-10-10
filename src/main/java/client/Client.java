@@ -8,23 +8,22 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     private Player nextPlayer;
     private Player previousPlayer;
-    private Stack<Card> hand;
+    private Stack<Card> playerStack;
+    private Stack<Card> discardStack;
     private Card card;
 
-    public Client() throws RemoteException {
-
-    }
+    public Client() throws RemoteException { }
 
     public void setNextPlayer(Player nextPlayer) {
         this.nextPlayer = nextPlayer;
     }
 
-    public void setPreviousPlayer(Player player) {
+    public void setPreviousPlayer(Player previousPlayer) {
         this.previousPlayer = previousPlayer;
     }
 
     public void setHand(Stack<Card> hand) {
-        this.hand = (Stack<Card>)hand.clone();
+        this.playerStack = (Stack<Card>)hand.clone();
     }
 
     public Card getCard() {
@@ -32,7 +31,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public void turnCard() {
-        this.card = this.hand.pop();
+        this.discardStack.push(this.card);
+        this.card = this.playerStack.pop();
         //TODO Notify other players
     }
 

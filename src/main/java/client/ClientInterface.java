@@ -9,6 +9,5 @@ public interface ClientInterface extends Remote {
     public void setPreviousPlayer(Player player);
     public void setHand(Stack<Card> hand);
     public Card getCard();
-    public void turnCard();
 
 }
