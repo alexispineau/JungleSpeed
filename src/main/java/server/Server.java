@@ -26,6 +26,7 @@ public class Server implements ServerInterface {
     }
 
     public static void main(String[] args) {
+        System.setProperty("java.security.policy","file:/home/alexis/Master/JungleSpeed/JungleSpeed/security.policy");
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
