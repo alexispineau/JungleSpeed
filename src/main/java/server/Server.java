@@ -43,10 +43,10 @@ public class Server implements ServerInterface {
     		clients.get(2).setPreviousPlayer(clients.get(3));
     		clients.get(3).setPreviousPlayer(clients.get(0));
     		
+    		/*clients.get(0).setHand(crds);
     		clients.get(0).setHand(crds);
     		clients.get(0).setHand(crds);
-    		clients.get(0).setHand(crds);
-    		clients.get(0).setHand(crds);
+    		clients.get(0).setHand(crds);*/
     		
     		cpt = 0;
     		
@@ -68,6 +68,7 @@ public class Server implements ServerInterface {
     	for (int i=0;i<1000;i++) {
     		 Math.random();
     	}
+    	return null;
     }
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
@@ -81,11 +82,7 @@ public class Server implements ServerInterface {
             ServerInterface server = new Server();
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
-<<<<<<< HEAD
-            System.out.println("--Serveur lancé--");
-=======
             System.out.println("Bravo le serveur a été démarré avec succès lol");
->>>>>>> branch 'master' of https://github.com/alexispineau/JungleSpeed.git
         } catch (Exception e) {
             e.printStackTrace();
         }
