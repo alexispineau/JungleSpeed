@@ -26,18 +26,13 @@ public class Server implements ServerInterface {
     }
 
     public static void main(String[] args) {
-        System.setProperty("java.security.policy","file:/home/alexis/Master/JungleSpeed/JungleSpeed/security.policy");
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
         try {
             String name = "//127.0.0.1:8090/Server";
             LocateRegistry.createRegistry(8090);
             ServerInterface server = new Server();
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
-            //Registry registry = LocateRegistry.getRegistry();
-            //registry.rebind(name, stub);
+            System.out.println("Bravo le serveur a été démarré avec succès lol");
         } catch (Exception e) {
             e.printStackTrace();
         }
