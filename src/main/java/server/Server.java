@@ -31,12 +31,13 @@ public class Server implements ServerInterface {
             System.setSecurityManager(new SecurityManager());
         }
         try {
-            String name = "Server";
+            String name = "//127.0.0.1:8090/Server";
+            LocateRegistry.createRegistry(8090);
             ServerInterface server = new Server();
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, stub);
+            //Registry registry = LocateRegistry.getRegistry();
+            //registry.rebind(name, stub);
         } catch (Exception e) {
             e.printStackTrace();
         }
