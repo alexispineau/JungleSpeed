@@ -7,10 +7,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import client.ClientInterface;
 
 public class Server implements ServerInterface {
+	
+	public static int nbMAXPlayerInGame = 4;
 
     private ArrayList<ClientInterface> clients;
     int cpt = 0;
@@ -21,11 +24,10 @@ public class Server implements ServerInterface {
 
     public void joinGame(ClientInterface client) throws RemoteException {
         
-    	
     	this.clients.add(client);
     	cpt++;
     	
-    	if (cpt < 4) {
+    	if (cpt < nbMAXPlayerInGame) {
     		try{
     			wait();
     		}
@@ -34,24 +36,16 @@ public class Server implements ServerInterface {
     		}
     	}
     	else {
-    		clients.get(0).setNextPlayer(clients.get(1));
-    		clients.get(0).setNextPlayer(clients.get(1));
-    		clients.get(1).setNextPlayer(clients.get(2));
-    		clients.get(2).setNextPlayer(clients.get(3));
-    		clients.get(3).setNextPlayer(clients.get(0));
     		
-    		clients.get(0).setPreviousPlayer(clients.get(1));
-    		clients.get(1).setPreviousPlayer(clients.get(2));
-    		clients.get(2).setPreviousPlayer(clients.get(3));
-    		clients.get(3).setPreviousPlayer(clients.get(0));
+    		ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(4);
+    		crds = melange(4,3);
     		
-    		/*clients.get(0).setHand(crds);
-    		clients.get(0).setHand(crds);
-    		clients.get(0).setHand(crds);
-    		clients.get(0).setHand(crds);*/
-    		
-    		cpt = 0;
-    		
+    		for(int i=0;i<nbMAXPlayerInGame;i++) {
+    			clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
+	    		clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
+	    		clients.get(i).setHand(crds.get(i));
+    		}
+    		cpt = 0;   		
     		notifyAll();
     	}
     
@@ -59,8 +53,8 @@ public class Server implements ServerInterface {
         
     }
     
-    private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
-    	ArrayList<ArrayList<Card>> res = new ArrayList<ArrayList<Card>>(nbPlayer);
+    private static ArrayList<Stack<Card>> melange(int cardNumber, int nbPlayer){
+    	ArrayList<Stack<Card>> res = new ArrayList<Stack<Card>>(nbPlayer);
     	ArrayList<Integer> tmpcrd = new ArrayList<Integer>(cardNumber*nbPlayer);
     	for(int i=0;i<nbPlayer;i++) {
     		for(int j=0;j<cardNumber;j++) {
@@ -79,7 +73,7 @@ public class Server implements ServerInterface {
     	}
     	
     	for(int i=0;i<nbPlayer;i++) {
-    		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>(cardNumber);
+    		Stack<Card> tabCardForOnePlayer = new Stack<Card>();
     		res.add(tabCardForOnePlayer);
     		for(int j=i*cardNumber;j<cardNumber*(i+1);j++) {
     			res.get(i).add(new Card (tmpcrd.get(j),""));
