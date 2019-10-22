@@ -65,10 +65,8 @@ public class Server implements ServerInterface {
     	for(int i=0;i<nbPlayer;i++) {
     		for(int j=0;j<cardNumber;j++) {
     			tmpcrd.add(j);
-    			System.out.print("-"+tmpcrd.get((i*cardNumber)+j));
     		}
     	}
-    	System.out.println();
     	
     	for (int i=0;i<1000;i++) {
     		int nombreAleatoire = (int)(Math.random() * ((cardNumber*nbPlayer)));
@@ -79,14 +77,6 @@ public class Server implements ServerInterface {
     		tmpcrd.set(nombreAleatoire2,tmp);
 
     	}
-    	
-    	for(int i=0;i<nbPlayer;i++) {
-    		for(int j=0;j<cardNumber;j++) {
-    			tmpcrd.add(j);
-    			System.out.print("*"+tmpcrd.get((i*cardNumber)+j));
-    		}
-    	}
-    	System.out.println();
     	
     	for(int i=0;i<nbPlayer;i++) {
     		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>(cardNumber);
