@@ -11,6 +11,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private Stack<Card> playerStack;
     private Stack<Card> discardStack;
     private Card card;
+    private boolean currentPlayer;
 
     public Client() throws RemoteException { }
 
@@ -20,6 +21,13 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public void setPreviousPlayer(ClientInterface previousPlayer) {
         this.previousPlayer = previousPlayer;
+    }
+    
+    public boolean getCurrentPlayer() {
+    	return this.currentPlayer;
+    }
+    public void setCurrentPlayer(boolean cur) {
+    	this.currentPlayer = cur;
     }
 
     public Card getBottomCardOfNextPlayer() {

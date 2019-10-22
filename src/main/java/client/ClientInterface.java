@@ -9,6 +9,8 @@ public interface ClientInterface extends Remote {
     // Moi je pense qu'il faut supprimer cette méthode^^
     public void setPreviousPlayer(ClientInterface player);
     public Card getBottomCardOfNextPlayer();
+    public boolean getCurrentPlayer();
+    public void setCurrentPlayer(boolean cur);
     public int getNbCardOfNextPlayer();
     public Card getBottomCard();
     public int getMyNbcard();

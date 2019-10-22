@@ -43,6 +43,9 @@ public class Server implements ServerInterface {
     		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
 	    	clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
 	    	clients.get(i).setHand(crds.get(i));
+	    	if (i == 0) {
+	    		clients.get(i).setCurrentPlayer(true);
+	    	}
     	}
     	cpt = 0;   		
     	notifyAll();
