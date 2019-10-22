@@ -1,6 +1,7 @@
 package server;
 
 import client.Card;
+import client.ClientInterface;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -34,6 +35,7 @@ public class Server implements ServerInterface {
     	}
     	else {
     		clients.get(0).setNextPlayer(clients.get(1));
+    		clients.get(0).setNextPlayer(clients.get(1));
     		clients.get(1).setNextPlayer(clients.get(2));
     		clients.get(2).setNextPlayer(clients.get(3));
     		clients.get(3).setNextPlayer(clients.get(0));
@@ -57,18 +59,51 @@ public class Server implements ServerInterface {
         
     }
     
-    private Card[][] melange(int cardNumber, int nbPlayer){
-    	ArrayList<Integer> tmpcrd = new ArrayList<Integer>(cardNumber*4);
-    	for(int i=0;i<4;i++) {
+    private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
+    	ArrayList<ArrayList<Card>> res = new ArrayList<ArrayList<Card>>(nbPlayer);
+    	ArrayList<Integer> tmpcrd = new ArrayList<Integer>(cardNumber*nbPlayer);
+    	for(int i=0;i<nbPlayer;i++) {
     		for(int j=0;j<cardNumber;j++) {
-    			tmpcrd.set(i*cardNumber+j, j);
+    			tmpcrd.add(j);
+    			System.out.print("-"+tmpcrd.get((i*cardNumber)+j));
+    		}
+    	}
+    	System.out.println();
+    	
+    	for (int i=0;i<1000;i++) {
+    		int nombreAleatoire = (int)(Math.random() * ((cardNumber*nbPlayer)));
+    		int nombreAleatoire2 = (int)(Math.random() * ((cardNumber*nbPlayer)));
+    		
+    		int tmp = tmpcrd.get(nombreAleatoire);
+    		tmpcrd.set(nombreAleatoire, tmpcrd.get(nombreAleatoire2));
+    		tmpcrd.set(nombreAleatoire2,tmp);
+
+    	}
+    	
+    	for(int i=0;i<nbPlayer;i++) {
+    		for(int j=0;j<cardNumber;j++) {
+    			tmpcrd.add(j);
+    			System.out.print("*"+tmpcrd.get((i*cardNumber)+j));
+    		}
+    	}
+    	System.out.println();
+    	
+    	for(int i=0;i<nbPlayer;i++) {
+    		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>(cardNumber);
+    		res.add(tabCardForOnePlayer);
+    		for(int j=i*cardNumber;j<cardNumber*(i+1);j++) {
+    			res.get(i).add(new Card (tmpcrd.get(j),""));
     		}
     	}
     	
-    	for (int i=0;i<1000;i++) {
-    		 Math.random();
+    	for(int i=0;i<nbPlayer;i++) {
+    		System.out.print("tab number : "+ (i+1) +" --> ");
+    		for(int j=0;j<cardNumber;j++) {
+    			System.out.print(res.get(i).get(j).getId() + " ,");
+    		}
+    		System.out.println();
     	}
-    	return null;
+    	return res;
     }
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
@@ -77,12 +112,13 @@ public class Server implements ServerInterface {
 
     public static void main(String[] args) {
         try {
-            String name = "//127.0.0.1:8091/Server";
-            LocateRegistry.createRegistry(8091);
+            String name = "//127.0.0.1:8090/Server";
+            LocateRegistry.createRegistry(8090);
             ServerInterface server = new Server();
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
             System.out.println("Bravo le serveur a été démarré avec succès lol");
+            melange(4,3);
         } catch (Exception e) {
             e.printStackTrace();
         }
