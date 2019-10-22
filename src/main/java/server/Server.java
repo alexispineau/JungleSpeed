@@ -36,8 +36,8 @@ public class Server implements ServerInterface {
     		}
     	}
     		
-    	ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(4);
-    	crds = melange(4,3);
+    	ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(nbMAXPlayerInGame);
+    	crds = melange(4,nbMAXPlayerInGame);
     		
     	for(int i=0;i<nbMAXPlayerInGame;i++) {
     		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
