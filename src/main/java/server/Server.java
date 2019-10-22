@@ -35,23 +35,18 @@ public class Server implements ServerInterface {
     			e.printStackTrace();
     		}
     	}
-    	else {
     		
-    		ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(4);
-    		crds = melange(4,3);
+    	ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(4);
+    	crds = melange(4,3);
     		
-    		for(int i=0;i<nbMAXPlayerInGame;i++) {
-    			clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
-	    		clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
-	    		clients.get(i).setHand(crds.get(i));
-    		}
-    		cpt = 0;   		
-    		notifyAll();
+    	for(int i=0;i<nbMAXPlayerInGame;i++) {
+    		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
+	    	clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
+	    	clients.get(i).setHand(crds.get(i));
     	}
-    
-        
-        
-    }
+    	cpt = 0;   		
+    	notifyAll();
+    }     
     
     private static ArrayList<Stack<Card>> melange(int cardNumber, int nbPlayer){
     	ArrayList<Stack<Card>> res = new ArrayList<Stack<Card>>(nbPlayer);
