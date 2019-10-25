@@ -33,16 +33,18 @@ public class Server implements ServerInterface {
              this.clientsInMatchMaking.add(client);
              cpt++;
         	// traitement pour les 3 premiers appels
-        	/*if (cpt < nbMAXPlayerInGame) {
-        		try{
+        	if (cpt < nbMAXPlayerInGame) {
+        		//try{
+        			System.out.println("SERVER Le client : "+clientPort+" entre en MM");
         			wait();
-        		}
-        		catch(Exception e) {
-        			e.printStackTrace();
-        		}
-        	}*/
+        			System.out.println("SERVER Le client : "+clientPort+" sort en MM");
+        		//}
+        		//catch(Exception e) {
+        		//	e.printStackTrace();
+        		//}
+        	}
         	// traitement pour le 4 eme appel
-        	/*else {
+        	else {
     	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
     	    	crds = melange(4,nbMAXPlayerInGame);
     	    		
@@ -57,7 +59,8 @@ public class Server implements ServerInterface {
     	    	}
     	    	cpt = 0;   		
     	    	notifyAll();
-        	}*/
+    	    	System.out.println("Lancement du jeu vidéal");
+        	}
          }
     	 catch (Exception e) {
              e.printStackTrace();
