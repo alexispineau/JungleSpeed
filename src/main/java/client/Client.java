@@ -89,7 +89,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             System.out.println("Client lancé");
             
             //Appel à la méthode joinGame du serveur pour commencer une partie
-            server.joinGame(client);
+            server.joinGame(name);
             
         } catch (Exception e) {
             e.printStackTrace();

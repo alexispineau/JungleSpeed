@@ -16,41 +16,51 @@ public class Server implements ServerInterface {
 	
 	public static int nbMAXPlayerInGame = 4;
 
-    private ArrayList<ClientInterface> clients; // fille d'attente pour attente de partie
+    private ArrayList<ClientInterface> clientsInMatchMaking; // fille d'attente pour attente de partie
     int cpt = 0;
 
     public Server() {
         super();
     }
 
-    public void joinGame(ClientInterface client) throws RemoteException {
-        
-    	this.clients.add(client);
-    	cpt++;
-    	
-    	if (cpt < nbMAXPlayerInGame) {
-    		try{
-    			wait();
-    		}
-    		catch(Exception e) {
-    			e.printStackTrace();
-    		}
-    	}
-    	else {
-	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
-	    	crds = melange(4,nbMAXPlayerInGame);
-	    		
-	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
-	    		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
-		    	clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
-		    	clients.get(i).setHand(crds.get(i));
-		    	if (i == 0) {
-		    		clients.get(i).setCurrentPlayer(true);
-		    	}
-	    	}
-	    	cpt = 0;   		
-	    	notifyAll();
-    	}
+    public void joinGame(String clientPort) throws RemoteException {
+    	 try {
+    		 // connection avec l'interface du client qui à appelé la méthode joinGame
+    		 ClientInterface client = (ClientInterface) Naming.lookup(clientPort);
+             System.out.println("Connexion au clien : "+clientPort);
+             // ajout de l'interface client dans une fille d'attente
+             this.clientsInMatchMaking.add(client);
+             cpt++;
+        	// traitement pour les 3 premiers appels
+        	if (cpt < nbMAXPlayerInGame) {
+        		try{
+        			wait();
+        		}
+        		catch(Exception e) {
+        			e.printStackTrace();
+        		}
+        	}
+        	// traitement pour le 4 eme appel
+        	else {
+    	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
+    	    	crds = melange(4,nbMAXPlayerInGame);
+    	    		
+    	    	// initialisation de joueur précédent et suivant pour chaque joueur + définition du joueru courant
+    	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
+    	    		clientsInMatchMaking.get(i).setNextPlayer(clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame));
+    	    		clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clientsInMatchMaking.get(i));
+    	    		clientsInMatchMaking.get(i).setHand(crds.get(i));
+    		    	if (i == 0) {
+    		    		clientsInMatchMaking.get(i).setCurrentPlayer(true);
+    		    	}
+    	    	}
+    	    	cpt = 0;   		
+    	    	notifyAll();
+        	}
+         }
+    	 catch (Exception e) {
+             e.printStackTrace();
+         }
     }     
     
     private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
@@ -97,7 +107,7 @@ public class Server implements ServerInterface {
             ClientInterface perdant = null;
             Card carte = null;
 
-            for(ClientInterface c : clients) {
+            for(ClientInterface c : clientsInMatchMaking) {
 
                     if(client.getBottomCard().getId() == c.getBottomCard().getId() && client != c) {
                         gagnant = client;
@@ -118,7 +128,7 @@ public class Server implements ServerInterface {
                     perdant.getPlayerStack().add(carte);
                 }
             } else {
-                for(ClientInterface c : clients) {
+                for(ClientInterface c : clientsInMatchMaking) {
                     if(c != client) {
                         carte = c.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
 						gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
