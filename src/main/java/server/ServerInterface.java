@@ -9,5 +9,6 @@ public interface ServerInterface extends Remote {
 
     public void joinGame(ClientInterface client) throws RemoteException;
     public void takeTheTotem(ClientInterface client) throws RemoteException;
+    public String test() throws RemoteException;
 
 }

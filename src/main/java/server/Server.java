@@ -2,6 +2,8 @@ package server;
 
 import client.Card;
 import client.ClientInterface;
+
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -125,6 +127,10 @@ public class Server implements ServerInterface {
             }
 
     }
+    
+    public String test() {
+    	return "Test de qualité";
+    }
 
     public static void main(String[] args) {
         try {
@@ -133,7 +139,9 @@ public class Server implements ServerInterface {
             ServerInterface server = new Server();
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
+            Naming.rebind(name,stub);
             System.out.println("Bravo le serveur a été démarré avec succès lol");
+            
             melange(4,3);
         } catch (Exception e) {
             e.printStackTrace();

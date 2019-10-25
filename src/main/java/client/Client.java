@@ -1,8 +1,11 @@
 package client;
 
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+
+import server.ServerInterface;
 
 public class Client extends UnicastRemoteObject implements ClientInterface {
 
@@ -64,5 +67,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
-
+	
+	public static void main(String[] args) {
+        try {
+            ServerInterface server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
+            System.out.println("CLient lancé");
+            System.out.println(server.test());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+	}
 }
