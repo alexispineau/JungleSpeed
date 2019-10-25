@@ -24,7 +24,7 @@ public class Server implements ServerInterface {
         clientsInMatchMaking = new  ArrayList<ClientInterface>();
     }
 
-    public void joinGame(String clientPort) throws RemoteException {
+    public synchronized void joinGame(String clientPort) throws RemoteException {
     	 try {
     		 // connection avec l'interface du client qui à appelé la méthode joinGame
     		 ClientInterface client = (ClientInterface) Naming.lookup(clientPort);
@@ -36,7 +36,7 @@ public class Server implements ServerInterface {
         	if (cpt < nbMAXPlayerInGame) {
         		//try{
         			System.out.println("SERVER Le client : "+clientPort+" entre en MM");
-        			wait();
+        			//wait();
         			System.out.println("SERVER Le client : "+clientPort+" sort en MM");
         		//}
         		//catch(Exception e) {
@@ -58,7 +58,7 @@ public class Server implements ServerInterface {
     		    	}
     	    	}
     	    	cpt = 0;   		
-    	    	notifyAll();
+    	    	//notifyAll();
     	    	System.out.println("Lancement du jeu vidéal");
         	}
          }
