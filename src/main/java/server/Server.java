@@ -109,15 +109,17 @@ public class Server implements ServerInterface {
             }
 
             if(estValide) {
-                while(!gagnant.getPlayerStack().empty()) {
-                    carte = gagnant.getPlayerStack().pop();
-                    perdant.getPlayerStack().push(carte);
+                while(gagnant.getPlayerStack().size() != 0) {
+                    carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
+                    gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
+                    perdant.getPlayerStack().add(carte);
                 }
             } else {
                 for(ClientInterface c : clients) {
                     if(c != client) {
-                        carte = c.getPlayerStack().pop();
-                        client.getPlayerStack().push(carte);
+                        carte = c.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
+						gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
+                        client.getPlayerStack().add(carte);
                     }
                 }
             }

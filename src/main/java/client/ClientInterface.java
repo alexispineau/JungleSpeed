@@ -1,6 +1,7 @@
 package client;
 
 import java.rmi.Remote;
+import java.util.ArrayList;
 
 public interface ClientInterface extends Remote {
 

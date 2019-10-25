@@ -45,8 +45,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public int getMyNbcard() {
-        //TODO
-        return -1;
+        return playerStack.size();
     }
 
     public void setHand(ArrayList<Card> hand) {
@@ -55,7 +54,12 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public void turnCard() {
         this.discardStack.add(this.card);
-        this.card = this.playerStack.remove(this.card);
+        for(Card s : this.playerStack) {
+            if(this.card == s) {
+                this.playerStack.remove(s);
+            }
+        }
+
         //TODO Notify other players
     }
 
