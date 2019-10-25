@@ -15,5 +15,6 @@ public interface ClientInterface extends Remote {
     public Card getBottomCard();
     public int getMyNbcard();
     public void setHand(Stack<Card> crds);
+	public Stack<Card> getPlayerStack();
 
 }

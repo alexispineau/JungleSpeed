@@ -59,4 +59,6 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         //TODO Notify other players
     }
 
+	public Stack<Card> getPlayerStack() {return this.discardStack;}
+
 }

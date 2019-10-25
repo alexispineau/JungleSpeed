@@ -90,6 +90,39 @@ public class Server implements ServerInterface {
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
         //TODO
+		 boolean estValide =false;
+            ClientInterface gagnant = null;
+            ClientInterface perdant = null;
+            Card carte = null;
+
+            for(ClientInterface c : clients) {
+
+                    if(client.getBottomCard().getId() == c.getBottomCard().getId() && client != c) {
+                        gagnant = client;
+                        perdant = c;
+                        estValide = true;
+                        break;
+                    }
+                    else {
+                        gagnant = c;
+                        perdant = client;
+                    }
+            }
+
+            if(estValide) {
+                while(!gagnant.getPlayerStack().empty()) {
+                    carte = gagnant.getPlayerStack().pop();
+                    perdant.getPlayerStack().push(carte);
+                }
+            } else {
+                for(ClientInterface c : clients) {
+                    if(c != client) {
+                        carte = c.getPlayerStack().pop();
+                        client.getPlayerStack().push(carte);
+                    }
+                }
+            }
+
     }
 
     public static void main(String[] args) {
