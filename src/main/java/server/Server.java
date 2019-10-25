@@ -21,27 +21,28 @@ public class Server implements ServerInterface {
 
     public Server() {
         super();
+        clientsInMatchMaking = new  ArrayList<ClientInterface>();
     }
 
     public void joinGame(String clientPort) throws RemoteException {
     	 try {
     		 // connection avec l'interface du client qui à appelé la méthode joinGame
     		 ClientInterface client = (ClientInterface) Naming.lookup(clientPort);
-             System.out.println("Connexion au clien : "+clientPort);
+             System.out.println("SERCER Connexion au clien : "+clientPort);
              // ajout de l'interface client dans une fille d'attente
              this.clientsInMatchMaking.add(client);
              cpt++;
         	// traitement pour les 3 premiers appels
-        	if (cpt < nbMAXPlayerInGame) {
+        	/*if (cpt < nbMAXPlayerInGame) {
         		try{
         			wait();
         		}
         		catch(Exception e) {
         			e.printStackTrace();
         		}
-        	}
+        	}*/
         	// traitement pour le 4 eme appel
-        	else {
+        	/*else {
     	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
     	    	crds = melange(4,nbMAXPlayerInGame);
     	    		
@@ -56,7 +57,7 @@ public class Server implements ServerInterface {
     	    	}
     	    	cpt = 0;   		
     	    	notifyAll();
-        	}
+        	}*/
          }
     	 catch (Exception e) {
              e.printStackTrace();

@@ -20,6 +20,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private boolean currentPlayer;
 
     public Client() throws RemoteException { }
+    public String testClient() {return "Appel à la méthode test du Client";}
 
     public void setNextPlayer(ClientInterface nextPlayer) {
         this.nextPlayer = nextPlayer;
@@ -83,9 +84,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             String name = "//127.0.0.1:"+localPort+"/Client";
             LocateRegistry.createRegistry(localPort);
             ClientInterface client = this;
-            ClientInterface stub =
-                    (ClientInterface) UnicastRemoteObject.exportObject(client, 0);
-            Naming.rebind(name,stub);
+            /*ClientInterface stub =
+                    (ClientInterface) UnicastRemoteObject.exportObject(client, 0);*/
+            Naming.rebind(name,client);
             System.out.println("Client lancé");
             
             //Appel à la méthode joinGame du serveur pour commencer une partie
@@ -96,7 +97,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         }
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException {
+		/*
         try {
             ServerInterface server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
             System.out.println("CLient lancé");
@@ -104,5 +106,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
+		try {
+			Client firstClient = new Client();
+			firstClient.IWantPlay(8097);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

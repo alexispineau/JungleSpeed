@@ -1,20 +1,23 @@
 package client;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface ClientInterface extends Remote {
 
-    public void setNextPlayer(ClientInterface player);
+	// méthode nul juste pour tester
+	public String testClient() throws RemoteException;
+    public void setNextPlayer(ClientInterface player ) throws RemoteException;
     // Moi je pense qu'il faut supprimer cette méthode^^
-    public void setPreviousPlayer(ClientInterface player);
-    public Card getBottomCardOfNextPlayer();
-    public boolean getCurrentPlayer();
-    public void setCurrentPlayer(boolean cur);
-    public int getNbCardOfNextPlayer();
-    public Card getBottomCard();
-    public int getMyNbcard();
-    public void setHand(ArrayList<Card> crds);
-	public ArrayList<Card> getPlayerStack();
+    public void setPreviousPlayer(ClientInterface player) throws RemoteException;
+    public Card getBottomCardOfNextPlayer() throws RemoteException;
+    public boolean getCurrentPlayer() throws RemoteException;
+    public void setCurrentPlayer(boolean cur) throws RemoteException;
+    public int getNbCardOfNextPlayer() throws RemoteException;
+    public Card getBottomCard() throws RemoteException;
+    public int getMyNbcard() throws RemoteException;
+    public void setHand(ArrayList<Card> crds) throws RemoteException;
+	public ArrayList<Card> getPlayerStack() throws RemoteException;
 
 }
