@@ -16,7 +16,7 @@ public class Server implements ServerInterface {
 	
 	public static int nbMAXPlayerInGame = 4;
 
-    private ArrayList<ClientInterface> clients;
+    private ArrayList<ClientInterface> clients; // fille d'attente pour attente de partie
     int cpt = 0;
 
     public Server() {
@@ -36,20 +36,21 @@ public class Server implements ServerInterface {
     			e.printStackTrace();
     		}
     	}
-    		
-    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
-    	crds = melange(4,nbMAXPlayerInGame);
-    		
-    	for(int i=0;i<nbMAXPlayerInGame;i++) {
-    		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
-	    	clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
-	    	clients.get(i).setHand(crds.get(i));
-	    	if (i == 0) {
-	    		clients.get(i).setCurrentPlayer(true);
+    	else {
+	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
+	    	crds = melange(4,nbMAXPlayerInGame);
+	    		
+	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
+	    		clients.get(i).setNextPlayer(clients.get((i+1)%nbMAXPlayerInGame));
+		    	clients.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clients.get(i));
+		    	clients.get(i).setHand(crds.get(i));
+		    	if (i == 0) {
+		    		clients.get(i).setCurrentPlayer(true);
+		    	}
 	    	}
+	    	cpt = 0;   		
+	    	notifyAll();
     	}
-    	cpt = 0;   		
-    	notifyAll();
     }     
     
     private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
