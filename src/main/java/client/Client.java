@@ -2,14 +2,14 @@ package client;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Stack;
+import java.util.ArrayList;
 
 public class Client extends UnicastRemoteObject implements ClientInterface {
 
     private ClientInterface nextPlayer;
     private ClientInterface previousPlayer;
-    private Stack<Card> playerStack;
-    private Stack<Card> discardStack;
+    private ArrayList<Card> playerStack;
+    private ArrayList<Card> discardStack;
     private Card card;
     private boolean currentPlayer;
 
@@ -49,16 +49,16 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         return -1;
     }
 
-    public void setHand(Stack<Card> hand) {
-        this.playerStack = (Stack<Card>)hand.clone();
+    public void setHand(ArrayList<Card> hand) {
+        this.playerStack = (ArrayList<Card>)hand.clone();
     }
 
     public void turnCard() {
-        this.discardStack.push(this.card);
-        this.card = this.playerStack.pop();
+        this.discardStack.add(this.card);
+        this.card = this.playerStack.remove(this.card);
         //TODO Notify other players
     }
 
-	public Stack<Card> getPlayerStack() {return this.discardStack;}
+	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
 
 }

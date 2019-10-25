@@ -7,7 +7,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import client.ClientInterface;
 
@@ -36,7 +35,7 @@ public class Server implements ServerInterface {
     		}
     	}
     		
-    	ArrayList<Stack<Card>> crds = new ArrayList<Stack<Card>>(nbMAXPlayerInGame);
+    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
     	crds = melange(4,nbMAXPlayerInGame);
     		
     	for(int i=0;i<nbMAXPlayerInGame;i++) {
@@ -51,8 +50,8 @@ public class Server implements ServerInterface {
     	notifyAll();
     }     
     
-    private static ArrayList<Stack<Card>> melange(int cardNumber, int nbPlayer){
-    	ArrayList<Stack<Card>> res = new ArrayList<Stack<Card>>(nbPlayer);
+    private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
+    	ArrayList<ArrayList<Card>> res = new ArrayList<ArrayList<Card>>(nbPlayer);
     	ArrayList<Integer> tmpcrd = new ArrayList<Integer>(cardNumber*nbPlayer);
     	for(int i=0;i<nbPlayer;i++) {
     		for(int j=0;j<cardNumber;j++) {
@@ -71,7 +70,7 @@ public class Server implements ServerInterface {
     	}
     	
     	for(int i=0;i<nbPlayer;i++) {
-    		Stack<Card> tabCardForOnePlayer = new Stack<Card>();
+    		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>();
     		res.add(tabCardForOnePlayer);
     		for(int j=i*cardNumber;j<cardNumber*(i+1);j++) {
     			res.get(i).add(new Card (tmpcrd.get(j),""));

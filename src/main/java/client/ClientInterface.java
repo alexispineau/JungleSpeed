@@ -1,7 +1,6 @@
 package client;
 
 import java.rmi.Remote;
-import java.util.Stack;
 
 public interface ClientInterface extends Remote {
 
@@ -14,7 +13,7 @@ public interface ClientInterface extends Remote {
     public int getNbCardOfNextPlayer();
     public Card getBottomCard();
     public int getMyNbcard();
-    public void setHand(Stack<Card> crds);
-	public Stack<Card> getPlayerStack();
+    public void setHand(ArrayList<Card> crds);
+	public ArrayList<Card> getPlayerStack();
 
 }
