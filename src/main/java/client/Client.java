@@ -38,16 +38,29 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public Card getBottomCardOfNextPlayer() {
-        //TODO
-        return null;
+        Card ret = null;
+        try {
+            ret = this.nextPlayer.getBottomCardOfNextPlayer();
+        }
+        catch(RemoteException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public int getNbCardOfNextPlayer() {
-        //TODO
-        return -1;
+        int ret = -1;
+        try {
+            ret =  this.nextPlayer.getNbCardOfNextPlayer();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public Card getBottomCard() {
+        Card ret = null;
+        ret = this.discardStack.get(this.discardStack.size()-1);
         return this.card;
     }
 
