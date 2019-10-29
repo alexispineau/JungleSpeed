@@ -122,7 +122,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         */
 		try {
 			Client firstClient = new Client();
-			firstClient.IWantPlay(8097);
+			firstClient.IWantPlay(8103);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
