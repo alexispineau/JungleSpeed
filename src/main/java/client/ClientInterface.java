@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public interface ClientInterface extends Remote {
 
 	// méthode nul juste pour tester
-	public String testClient() throws RemoteException;
+	public int getClientID() throws RemoteException;
+	public String testClient(String text) throws RemoteException;
     public void setNextPlayer(ClientInterface player ) throws RemoteException;
     // Moi je pense qu'il faut supprimer cette méthode^^
     public void setPreviousPlayer(ClientInterface player) throws RemoteException;

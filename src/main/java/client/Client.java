@@ -11,16 +11,19 @@ import server.ServerInterface;
 
 public class Client extends UnicastRemoteObject implements ClientInterface {
 
+	public int clientID;
 	private ServerInterface server;
-    private ClientInterface nextPlayer;
-    private ClientInterface previousPlayer;
+    public ClientInterface nextPlayer;
+    public ClientInterface previousPlayer;
     private ArrayList<Card> playerStack;
     private ArrayList<Card> discardStack;
     private Card card;
     private boolean currentPlayer;
+    
+    public int getClientID() throws RemoteException {return clientID;}
 
     public Client() throws RemoteException { }
-    public String testClient() {return "Appel à la méthode test du Client";}
+    public String testClient(String text) {return text;}
 
     public void setNextPlayer(ClientInterface nextPlayer) {
         this.nextPlayer = nextPlayer;
@@ -88,6 +91,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	// Envoie un signal au serveur pour signifier que je veux jouer
 	public void IWantPlay(int localPort) {
 		try {
+			clientID = localPort;
 			// connection au serveur
             server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
             System.out.println("Interface server récuppérée");
@@ -100,7 +104,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             /*ClientInterface stub =
                     (ClientInterface) UnicastRemoteObject.exportObject(client, 0);*/
             Naming.rebind(name,client);
-            System.out.println("Client lancé");
+            System.out.println("Client"+" "+localPort+""+ "lancé");
             
             //Appel à la méthode joinGame du serveur pour commencer une partie
             server.joinGame(name);
@@ -122,7 +126,19 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         */
 		try {
 			Client firstClient = new Client();
-			firstClient.IWantPlay(8103);
+			firstClient.IWantPlay(8100);
+			
+			Client secondClient = new Client();
+			secondClient.IWantPlay(8101);
+			
+			Client thirdClient = new Client();
+			thirdClient.IWantPlay(8102);
+			
+			Client fourClient = new Client();
+			fourClient.IWantPlay(8103);
+			
+			firstClient.previousPlayer.testClient("Test de com avec le previous");
+			firstClient.nextPlayer.testClient("test de com avec le next");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

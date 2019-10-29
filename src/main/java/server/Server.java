@@ -24,20 +24,20 @@ public class Server implements ServerInterface {
         clientsInMatchMaking = new  ArrayList<ClientInterface>();
     }
 
-    public synchronized void joinGame(String clientPort) throws RemoteException {
+    public synchronized void joinGame(String clientAdress) throws RemoteException {
     	 try {
     		 // connection avec l'interface du client qui à appelé la méthode joinGame
-    		 ClientInterface client = (ClientInterface) Naming.lookup(clientPort);
-             System.out.println("SERCER Connexion au clien : "+clientPort);
+    		 ClientInterface client = (ClientInterface) Naming.lookup(clientAdress);
+             System.out.println("SERCER Connexion au clien : "+clientAdress);
              // ajout de l'interface client dans une fille d'attente
              this.clientsInMatchMaking.add(client);
              cpt++;
         	// traitement pour les 3 premiers appels
         	if (cpt < nbMAXPlayerInGame) {
         		//try{
-        			System.out.println("SERVER Le client : "+clientPort+" entre en MM");
+        			System.out.println("SERVER Le client : "+clientAdress+" entre en MM");
         			//wait();
-        			System.out.println("SERVER Le client : "+clientPort+" sort en MM");
+       
         		//}
         		//catch(Exception e) {
         		//	e.printStackTrace();
@@ -53,7 +53,10 @@ public class Server implements ServerInterface {
     	    		clientsInMatchMaking.get(i).setNextPlayer(clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame));
     	    		clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clientsInMatchMaking.get(i));
     	    		clientsInMatchMaking.get(i).setHand(crds.get(i));
-    		    	if (i == 0) {
+    	    		System.out.println("The player " + clientsInMatchMaking.get(i).getClientID() +" has for next player " + clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).getClientID());
+    	    		System.out.println("The player " + clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).getClientID() +" has for previous player " + clientsInMatchMaking.get(i).getClientID());
+
+    	    		if (i == 0) {
     		    		clientsInMatchMaking.get(i).setCurrentPlayer(true);
     		    	}
     	    	}
