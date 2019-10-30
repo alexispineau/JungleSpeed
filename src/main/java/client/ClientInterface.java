@@ -20,5 +20,6 @@ public interface ClientInterface extends Remote {
     public int getMyNbcard() throws RemoteException;
     public void setHand(ArrayList<Card> crds) throws RemoteException;
 	public ArrayList<Card> getPlayerStack() throws RemoteException;
+	public void passMyturn() throws RemoteException;
 
 }

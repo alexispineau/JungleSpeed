@@ -15,10 +15,10 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	private ServerInterface server;
     public ClientInterface nextPlayer;
     public ClientInterface previousPlayer;
-    private ArrayList<Card> playerStack;
-    private ArrayList<Card> discardStack;
+    private ArrayList<Card> playerStack; // Cartes non joués
+    private ArrayList<Card> discardStack; // Cartes joués
     private Card card;
-    private boolean currentPlayer;
+    private boolean currentPlayer; // vrai si ce client est le joueur courant
     
     public int getClientID() throws RemoteException {return clientID;}
 
@@ -85,6 +85,19 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
         //TODO Notify other players
     }
+    
+    // passe la main au joueur suivant
+    public void passMyturn() throws RemoteException {
+    	if (this.currentPlayer) {
+    		this.currentPlayer = false;
+    		try{
+    			this.nextPlayer.setCurrentPlayer(true);
+    		}
+    		catch(Exception e) {
+    			e.printStackTrace();
+    		}
+    	}
+    }
 
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
 	
@@ -137,8 +150,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 			Client fourClient = new Client();
 			fourClient.IWantPlay(8103);
 			
-			firstClient.previousPlayer.testClient("Test de com avec le previous");
-			firstClient.nextPlayer.testClient("test de com avec le next");
+			System.out.println(firstClient.previousPlayer.testClient("Test de com avec le previous"));
+			System.out.println(firstClient.nextPlayer.testClient("test de com avec le next"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
