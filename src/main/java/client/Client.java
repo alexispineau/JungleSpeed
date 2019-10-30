@@ -43,7 +43,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     public Card getBottomCardOfNextPlayer() {
         Card ret = null;
         try {
-            ret = this.nextPlayer.getBottomCardOfNextPlayer();
+            ret = this.nextPlayer.getBottomCard();
         }
         catch(RemoteException e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     public int getNbCardOfNextPlayer() {
         int ret = -1;
         try {
-            ret =  this.nextPlayer.getNbCardOfNextPlayer();
+            ret =  this.nextPlayer.getMyNbcard();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -62,9 +62,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public Card getBottomCard() {
-        Card ret = null;
-        ret = this.discardStack.get(this.discardStack.size()-1);
-        return this.card;
+        Card ret = this.discardStack.get(this.discardStack.size()-1);
+        return ret;
     }
 
     public int getMyNbcard() {
@@ -76,12 +75,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public void turnCard() {
-        this.discardStack.add(this.card);
-        for(Card s : this.playerStack) {
-            if(this.card == s) {
-                this.playerStack.remove(s);
-            }
-        }
+    	if(this.currentPlayer) {
+    		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
+    	}
 
         //TODO Notify other players
     }
@@ -137,7 +133,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             e.printStackTrace();
         }
         */
-		try {
+		try {/*
 			Client firstClient = new Client();
 			firstClient.IWantPlay(8100);
 			
@@ -151,7 +147,13 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 			fourClient.IWantPlay(8103);
 			
 			System.out.println(firstClient.previousPlayer.testClient("Test de com avec le previous"));
-			System.out.println(firstClient.nextPlayer.testClient("test de com avec le next"));
+			System.out.println(firstClient.nextPlayer.testClient("test de com avec le next"));*/
+			ArrayList<Integer> test = new ArrayList<Integer>();
+			for (int i=0;i<10;i++) { test.add(i); }
+			System.out.println("Taille du tableau test après 10 add : "+test.size());
+			test.remove(test.size()-1);
+			System.out.println("Taille du tableau test après 10 add puis un remove : "+test.size());
+
 		}
 		catch (Exception e) {
 			e.printStackTrace();
