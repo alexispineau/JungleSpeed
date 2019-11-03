@@ -109,41 +109,50 @@ public class Server implements ServerInterface {
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
         //TODO
-		 boolean estValide =false;
+    	ArrayList<ClientInterface> allPlayers = new ArrayList<ClientInterface>();
+    	allPlayers.add(client.getPreviousPlayerInterface());
+    	allPlayers.add(client.getNextPlayerInterface());
+    	allPlayers.add(client.getThirdClientInterface());
+    	
+    	boolean clientGagnant = false;
+    	
+    	
+		 boolean estValide = false;
             ClientInterface gagnant = null;
             ClientInterface perdant = null;
             Card carte = null;
 
-            for(ClientInterface c : clientsInMatchMaking) {
-
+            // définition du gagnant et du perdant
+            for(ClientInterface c : allPlayers) {
                     if(client.getBottomCard().getId() == c.getBottomCard().getId() && client != c) {
+                    	clientGagnant = true;
                         gagnant = client;
                         perdant = c;
-                        estValide = true;
                         break;
                     }
-                    else {
-                        gagnant = c;
-                        perdant = client;
-                    }
             }
-
-            if(estValide) {
-                while(gagnant.getPlayerStack().size() != 0) {
+            if (clientGagnant == false) {
+            	perdant = client;
+            }
+            
+            // écganger des cartes
+            if(clientGagnant) {
+                while(gagnant.getPlayerStack().size() > 0) {
                     carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
                     gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
-                    perdant.getPlayerStack().add(carte);
+                    perdant.getPlayerDeck().add(carte);
                 }
             } else {
-                for(ClientInterface c : clientsInMatchMaking) {
+                for(ClientInterface c : allPlayers) {
                     if(c != client) {
-                        carte = c.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
-						gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
-                        client.getPlayerStack().add(carte);
+                    	while(c.getPlayerStack().size() > 0) {
+                            carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
+                            c.getPlayerStack().remove(c.getPlayerStack().size()-1);
+                            perdant.getPlayerDeck().add(carte);
+                        }
                     }
                 }
             }
-
     }
     
     public String test() {

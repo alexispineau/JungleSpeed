@@ -21,6 +21,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private boolean currentPlayer; // vrai si ce client est le joueur courant
     
     public int getClientID() throws RemoteException {return clientID;}
+	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
+	public ClientInterface getPreviousPlayerInterface() throws RemoteException { return previousPlayer;}
+	public ClientInterface getThirdClientInterface() throws RemoteException { return nextPlayer.getNextPlayerInterface();}
 
     public Client() throws RemoteException { }
     public String testClient(String text) {return text;}
@@ -96,6 +99,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
+	public ArrayList<Card> getPlayerDeck() {return this.playerStack;}
 	
 	// Envoie un signal au serveur pour signifier que je veux jouer
 	public void IWantPlay(int localPort) {
