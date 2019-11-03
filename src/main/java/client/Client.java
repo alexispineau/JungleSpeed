@@ -19,11 +19,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private ArrayList<Card> discardStack; // Cartes joués
     private Card card;
     private boolean currentPlayer; // vrai si ce client est le joueur courant
+    private boolean iHaveWin = false;
     
     public int getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException { return previousPlayer;}
 	public ClientInterface getThirdClientInterface() throws RemoteException { return nextPlayer.getNextPlayerInterface();}
+	public boolean getIHaveWin() {return iHaveWin;}
+	public void setIHaveWin(boolean bl) {iHaveWin = bl;}
 
     public Client() throws RemoteException { }
     public String testClient(String text) {return text;}

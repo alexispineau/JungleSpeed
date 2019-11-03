@@ -153,6 +153,14 @@ public class Server implements ServerInterface {
                     }
                 }
             }
+            
+            // on vérifie si il y à un gagnant ou pas
+            allPlayers.add(client);
+	            for(ClientInterface c : allPlayers) {
+	            	if (c.getMyNbcard() <= 0)
+	            		//TODO envoyer un message aux autres players
+	            		c.setIHaveWin(true);
+	            }
     }
     
     public String test() {

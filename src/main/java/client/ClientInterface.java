@@ -26,6 +26,8 @@ public interface ClientInterface extends Remote {
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException;
 	public ClientInterface getThirdClientInterface() throws RemoteException;
 	public ArrayList<Card> getPlayerDeck() throws RemoteException;
+	public boolean getIHaveWin() throws RemoteException;
+	public void setIHaveWin(boolean bl) throws RemoteException;
 
 
 
