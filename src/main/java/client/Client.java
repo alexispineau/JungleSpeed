@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import server.Server;
 import server.ServerInterface;
@@ -20,6 +21,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private Card card;
     private boolean currentPlayer; // vrai si ce client est le joueur courant
     private boolean iHaveWin = false;
+    private ArrayList<JungleListener> listeners;
+    private JungleController controller;
     
     public int getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
@@ -28,7 +31,10 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	public boolean getIHaveWin() {return iHaveWin;}
 	public void setIHaveWin(boolean bl) {iHaveWin = bl;}
 
-    public Client() throws RemoteException { }
+    public Client(JungleController controller) throws RemoteException {
+        this.listeners = new ArrayList<JungleListener>();
+        this.controller = controller;
+    }
     public String testClient(String text) {return text;}
 
     public void setNextPlayer(ClientInterface nextPlayer) {
@@ -78,6 +84,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public void setHand(ArrayList<Card> hand) {
         this.playerStack = (ArrayList<Card>)hand.clone();
+        controller.update();
     }
 
     public void turnCard() {
@@ -105,7 +112,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	public ArrayList<Card> getPlayerDeck() {return this.playerStack;}
 	
 	// Envoie un signal au serveur pour signifier que je veux jouer
-	public void IWantPlay(int localPort) {
+	public void iWantPlay(int localPort) {
 		try {
 			clientID = localPort;
 			// connection au serveur
@@ -124,11 +131,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             
             //Appel à la méthode joinGame du serveur pour commencer une partie
             server.joinGame(name);
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
 	}
+
+	public void addListener(JungleListener jl) {
+        this.listeners.add(jl);
+    }
 	
 	public static void main(String[] args) throws RemoteException {
 		/*
