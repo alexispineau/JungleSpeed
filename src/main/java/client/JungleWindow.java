@@ -55,7 +55,11 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         this.setVisible(true);
     }
 
-    private void setCard(String path) {
+    private void setCard(Card card) {
+        String path = "src/main/resources/carteverso.png";
+        if (card != null) {
+            card.getPicPath();
+        }
         this.pile.setIcon(new ImageIcon(path));
     }
 
@@ -76,7 +80,7 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
 
     public void update() {
         System.out.println("*** Coucou mdr ");
-        setCard(controller.getBottomCard().getPicPath());
+        setCard(controller.getBottomCard());
     }
 
 }

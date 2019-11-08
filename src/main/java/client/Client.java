@@ -33,6 +33,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public Client(JungleController controller) throws RemoteException {
         this.listeners = new ArrayList<JungleListener>();
+        this.discardStack = new ArrayList<Card>();
         this.controller = controller;
     }
     public String testClient(String text) {return text;}
@@ -74,7 +75,10 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public Card getBottomCard() {
-        Card ret = this.discardStack.get(this.discardStack.size()-1);
+        Card ret = null;
+        if (!discardStack.isEmpty()) {
+            ret = this.discardStack.get(this.discardStack.size()-1);
+        }
         return ret;
     }
 
