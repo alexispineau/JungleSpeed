@@ -22,7 +22,6 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private boolean currentPlayer; // vrai si ce client est le joueur courant
     private boolean iHaveWin = false;
     private ArrayList<JungleListener> listeners;
-    private JungleController controller;
     
     public int getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
@@ -31,10 +30,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	public boolean getIHaveWin() {return iHaveWin;}
 	public void setIHaveWin(boolean bl) {iHaveWin = bl;}
 
-    public Client(JungleController controller) throws RemoteException {
+    public Client() throws RemoteException {
         this.listeners = new ArrayList<JungleListener>();
         this.discardStack = new ArrayList<Card>();
-        this.controller = controller;
     }
     public String testClient(String text) {return text;}
 
@@ -88,7 +86,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public void setHand(ArrayList<Card> hand) {
         this.playerStack = (ArrayList<Card>)hand.clone();
-        controller.update();
+        for (JungleListener l : listeners) {
+            l.startGame();
+        }
     }
 
     public void turnCard() {
@@ -96,6 +96,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
     	}
 
+    	updateListeners();
         //TODO Notify other players
     }
     
@@ -110,6 +111,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     			e.printStackTrace();
     		}
     	}
+    	updateListeners();
     }
 
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
@@ -142,6 +144,12 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
 	public void addListener(JungleListener jl) {
         this.listeners.add(jl);
+    }
+
+    private void updateListeners() {
+        for (JungleListener l : listeners) {
+            l.update();
+        }
     }
 	
 	public static void main(String[] args) throws RemoteException {

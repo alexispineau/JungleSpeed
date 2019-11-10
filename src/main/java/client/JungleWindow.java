@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class JungleWindow extends JFrame implements JungleListener, ActionListener {
 
     private JPanel mainPanel, cardsPanel, totemPanel;
-    private JButton totem, pile, play, defausse, pass;
+    private JButton totem, pile, play, discard, pass;
     private JungleController controller;
     private JLabel j1, j2, j3;
 
@@ -40,7 +40,7 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
 
         totem = new JButton("TOTEM");
         play = new JButton("Jouer");
-        pile =  new JButton(); defausse = new JButton("Défausse");
+        pile =  new JButton(); discard = new JButton("Défausse");
         pass = new JButton("Passer tour");
 
         play.addActionListener(this);
@@ -50,17 +50,19 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
 
         totemPanel.add(totem, BorderLayout.CENTER);
         mainPanel.add(play, BorderLayout.WEST);
-        cardsPanel.add(pass); cardsPanel.add(pile); cardsPanel.add(defausse);
+        cardsPanel.add(pass); cardsPanel.add(pile); cardsPanel.add(discard);
 
         this.setVisible(true);
     }
 
     private void setCard(Card card) {
-        String path = "src/main/resources/carteverso.png";
+        String path = "src/main/resources/nocard.png";
         if (card != null) {
-            card.getPicPath();
+            path = card.getPicPath();
         }
-        this.pile.setIcon(new ImageIcon(path));
+        this.discard.setIcon(new ImageIcon(path));
+        int n = controller.getNbCards();
+        this.discard.setText(n+" cartes");
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -78,8 +80,13 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         }
     }
 
+    public void startGame() {
+        this.pile.setIcon(new ImageIcon("src/main/resources/carteverso.png"));
+        this.discard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
+    }
+
     public void update() {
-        System.out.println("*** Coucou mdr ");
+        pile.setText(controller.getNbCards()+" cartes restantes");
         setCard(controller.getBottomCard());
     }
 

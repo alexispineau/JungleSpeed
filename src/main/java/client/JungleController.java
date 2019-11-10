@@ -8,8 +8,9 @@ public class JungleController {
 
     public JungleController(int port) {
         try {
-            model = new Client(this);
+            model = new Client();
             view = new JungleWindow(this);
+            model.addListener(view);
             this.port = port;
         } catch (Exception e) {
             e.printStackTrace();
@@ -22,6 +23,10 @@ public class JungleController {
 
     public Card getBottomCard() {
         return model.getBottomCard();
+    }
+
+    public int getNbCards() {
+        return model.getMyNbcard();
     }
 
     public void turnCard() {
@@ -37,10 +42,6 @@ public class JungleController {
     }
     public void takeTotem() {
         model.setIHaveWin(true);
-    }
-
-    public void update() {
-        view.update();
     }
 
     public static void main(String[] args) {
