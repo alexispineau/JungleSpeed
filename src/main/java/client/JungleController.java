@@ -6,9 +6,9 @@ public class JungleController {
     private JungleWindow view;
     private int port;
 
-    public JungleController(int port) {
+    public JungleController(int port, int n) {
         try {
-            model = new Client();
+            model = new Client("Joueur "+n);
             view = new JungleWindow(this);
             model.addListener(view);
             this.port = port;
@@ -46,12 +46,11 @@ public class JungleController {
 
     public static void main(String[] args) {
         try {
-            new JungleController(8100);
-            new JungleController(8101);
-            new JungleController(8102);
-            new JungleController(8103);
+            new JungleController(8100, 1);
+            new JungleController(8101, 2);
+            new JungleController(8102, 3);
+            new JungleController(8103, 4);
         } catch (Exception e) {
-            System.out.println("Erreur, n'oubliez pas de spécifier un port en lançant le jeu");
             e.printStackTrace();
         }
     }

@@ -22,6 +22,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private boolean currentPlayer; // vrai si ce client est le joueur courant
     private boolean iHaveWin = false;
     private ArrayList<JungleListener> listeners;
+    private String name;
     
     public int getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
@@ -30,9 +31,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	public boolean getIHaveWin() {return iHaveWin;}
 	public void setIHaveWin(boolean bl) {iHaveWin = bl;}
 
-    public Client() throws RemoteException {
+    public Client(String name) throws RemoteException {
         this.listeners = new ArrayList<JungleListener>();
         this.discardStack = new ArrayList<Card>();
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
     public String testClient(String text) {return text;}
 
