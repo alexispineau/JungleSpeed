@@ -19,7 +19,8 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
     }
 
     private void initWindow() {
-        this.setExtendedState(MAXIMIZED_BOTH);
+        //this.setExtendedState(MAXIMIZED_BOTH);
+        this.setSize(600, 400);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
