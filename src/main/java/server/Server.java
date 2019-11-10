@@ -177,7 +177,7 @@ public class Server implements ServerInterface {
             Naming.rebind(name,stub);
             System.out.println("Bravo le serveur a été démarré avec succès lol");
             
-            melange(4,3);
+            melange(17,3);
         } catch (Exception e) {
             e.printStackTrace();
         }
