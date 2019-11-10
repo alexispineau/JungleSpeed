@@ -10,6 +10,7 @@ public class JungleController {
         try {
             model = new Client("Joueur "+n);
             view = new JungleWindow(this);
+            model.addListener(view);
             this.port = port;
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,6 +59,7 @@ public class JungleController {
 
     public static void main(String[] args) {
         try {
+            System.out.println("Création des clients");
             new JungleController(8100, 1);
             new JungleController(8101, 2);
             new JungleController(8102, 3);
