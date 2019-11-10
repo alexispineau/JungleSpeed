@@ -81,6 +81,7 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
     }
 
     public void startGame() {
+        this.controller.addListener(this);
         this.pile.setIcon(new ImageIcon("src/main/resources/carteverso.png"));
         this.discard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
     }

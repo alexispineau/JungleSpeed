@@ -10,7 +10,6 @@ public class JungleController {
         try {
             model = new Client("Joueur "+n);
             view = new JungleWindow(this);
-            model.addListener(view);
             this.port = port;
         } catch (Exception e) {
             e.printStackTrace();
@@ -19,6 +18,19 @@ public class JungleController {
 
     public void wantPlay() {
         model.iWantPlay(port);
+    }
+
+    public void addListener(JungleListener listener) {
+        try {
+            ClientInterface c = model.getNextPlayerInterface();
+            c.addListener(listener);
+            c = c.getNextPlayerInterface();
+            c.addListener(listener);
+            c = c.getNextPlayerInterface();
+            c.addListener(listener);
+        } catch (Exception e) {
+
+        }
     }
 
     public Card getBottomCard() {

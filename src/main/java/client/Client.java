@@ -101,22 +101,19 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     	if(this.currentPlayer) {
     		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
     	}
-
+        this.currentPlayer = false;
     	updateListeners();
         //TODO Notify other players
     }
     
     // passe la main au joueur suivant
     public void passMyturn() throws RemoteException {
-    	if (this.currentPlayer) {
-    		this.currentPlayer = false;
-    		try{
-    			this.nextPlayer.setCurrentPlayer(true);
-    		}
-    		catch(Exception e) {
-    			e.printStackTrace();
-    		}
-    	}
+        try{
+            this.nextPlayer.setCurrentPlayer(true);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     	updateListeners();
     }
 
@@ -148,8 +145,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         }
 	}
 
-	public void addListener(JungleListener jl) {
-        this.listeners.add(jl);
+	public void addListener(JungleListener listener) throws RemoteException{
+        this.listeners.add(listener);
     }
 
     private void updateListeners() {

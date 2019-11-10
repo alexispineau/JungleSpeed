@@ -46,7 +46,7 @@ public class Server implements ServerInterface {
         	// traitement pour le 4 eme appel
         	else {
     	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
-    	    	crds = melange(4,nbMAXPlayerInGame);
+    	    	crds = melange(17,nbMAXPlayerInGame);
     	    		
     	    	// initialisation de joueur précédent et suivant pour chaque joueur + définition du joueru courant
     	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
