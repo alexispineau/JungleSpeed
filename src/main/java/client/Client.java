@@ -102,6 +102,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
     	}
     	this.passMyturn();
+    	System.out.println("*** turnCard() : on va update les listeners");
     	updateListeners();
     }
     
@@ -170,7 +171,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 
     public void updateListeners() {
+        System.out.println(" ** updateListeners()");
         for (JungleListener l : listeners) {
+            System.out.println(" ** updateListeners() : on va update un listener");
             l.update();
         }
     }

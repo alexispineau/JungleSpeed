@@ -1,5 +1,9 @@
 package client;
 
+import jdk.nashorn.internal.runtime.ECMAException;
+
+import java.util.ArrayList;
+
 public class JungleController {
 
     private Client model;
@@ -23,19 +27,28 @@ public class JungleController {
 
     public void addListener(JungleListener listener) {
         try {
-            ClientInterface c = model.getNextPlayerInterface();
-            c.addListener(listener);
-            c = c.getNextPlayerInterface();
-            c.addListener(listener);
-            c = c.getNextPlayerInterface();
-            c.addListener(listener);
+            model.getNextPlayerInterface().addListener(listener);
+            model.getThirdClientInterface().addListener(listener);
+            model.getPreviousPlayerInterface().addListener(listener);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
     public Card getBottomCard() {
         return model.getBottomCard();
+    }
+
+    public Card[] getOthersCards() {
+        Card[] ret = new Card[3];
+        try {
+            ret[0] = model.getNextPlayerInterface().getBottomCard();
+            ret[1] = model.getThirdClientInterface().getBottomCard();
+            ret[2] = model.getPreviousPlayerInterface().getBottomCard();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public int getNbCards() {
@@ -48,6 +61,22 @@ public class JungleController {
 
     public void takeTotem() {
         model.takeTotem();
+    }
+
+    public String getName() {
+        return model.getName();
+    }
+
+    public String[] getOthersName() {
+        String[] ret = new String[3];
+        try {
+            ret[0] = model.getNextPlayerInterface().getName();
+            ret[1] = model.getThirdClientInterface().getName();
+            ret[2] = model.getPreviousPlayerInterface().getName();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static void main(String[] args) {
