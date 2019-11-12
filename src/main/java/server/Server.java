@@ -138,16 +138,20 @@ public class Server implements ServerInterface {
 		}
             
          // écganger des cartes
+		System.out.println("ddfkldf1");
 		if(clientGagnant) {
          	while(gagnant.getPlayerStack().size() > 0) {
+				System.out.println("avant :"+gagnant.getPlayerStack().size());
             	carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
-                gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
+                gagnant.getPlayerStack().remove(carte);
                 perdant.getPlayerDeck().add(carte);
+				System.out.println("après :"+gagnant.getPlayerStack().size());
          	}
 		} else {
          	for(ClientInterface c : otherPlayers) {
          		if(c != client) {
             		while(c.getPlayerStack().size() > 0) {
+            			System.out.println("fdjkfd");
             			carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
             			c.getPlayerStack().remove(c.getPlayerStack().size()-1);
             			perdant.getPlayerDeck().add(carte);
@@ -155,6 +159,7 @@ public class Server implements ServerInterface {
             	}
          	}
 		}
+		System.out.println("ddfkldf2");
             
 		// on vérifie si il y à un gagnant ou pas
 		otherPlayers.add(client);

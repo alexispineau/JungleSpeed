@@ -7,10 +7,9 @@ import java.awt.event.ActionListener;
 
 public class JungleWindow extends JFrame implements JungleListener, ActionListener {
 
-    private JPanel mainPanel, cardsPanel, totemPanel;
-    private JButton totem, pile, play, discard, pass;
+    private JButton totem, pile, play, discard;
     private JungleController controller;
-    private JLabel j1, j2, j3;
+    private JLabel j2, j3, j4;
 
     public JungleWindow(JungleController controller) {
         super("Jungle Speed");
@@ -24,34 +23,38 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        cardsPanel = new JPanel();
-        cardsPanel.setLayout(new GridLayout(1,3));
-        totemPanel = new JPanel();
-        totemPanel.setLayout(new BorderLayout());
         this.setContentPane(mainPanel);
-        mainPanel.add(cardsPanel, BorderLayout.SOUTH);
-        mainPanel.add(totemPanel, BorderLayout.CENTER);
 
-        j1 = new JLabel("j1"); j2 = new JLabel("j2"); j3 = new JLabel("j3");
-        totemPanel.add(j1, BorderLayout.WEST);
-        totemPanel.add(j2, BorderLayout.NORTH);
-        totemPanel.add(j3, BorderLayout.EAST);
+        JPanel playPanel = new JPanel();
+        playPanel.setLayout(new GridLayout(2,1));
+        JPanel gamePanel = new JPanel();
+        gamePanel.setLayout(new BorderLayout());
+        mainPanel.add(playPanel, BorderLayout.WEST);
+        mainPanel.add(gamePanel, BorderLayout.CENTER);
 
+        JPanel playerPanel = new JPanel(); playerPanel.setLayout(new GridLayout(1,2));
+        JPanel p2Panel = new JPanel(); p2Panel.setLayout(new GridLayout(2,1));
+        JPanel p3Panel = new JPanel(); p3Panel.setLayout(new GridLayout(2,1));
+        JPanel p4Panel = new JPanel(); p4Panel.setLayout(new GridLayout(2,1));
+        gamePanel.add(playerPanel, BorderLayout.SOUTH);
+        gamePanel.add(p2Panel, BorderLayout.WEST);
+        gamePanel.add(p3Panel, BorderLayout.NORTH);
+        gamePanel.add(p4Panel, BorderLayout.EAST);
+
+        j2 = new JLabel("j2"); j3 = new JLabel("j3"); j4 = new JLabel("j4");
+        p2Panel.add(j2); p3Panel.add(j3); p4Panel.add(j4);
         totem = new JButton("TOTEM");
+        gamePanel.add(totem, BorderLayout.CENTER);
         play = new JButton("Jouer");
+        playPanel.add(play);
         pile =  new JButton(); discard = new JButton("Défausse");
-        pass = new JButton("Passer tour");
+        playerPanel.add(pile); playerPanel.add(discard);
 
         play.addActionListener(this);
         totem.addActionListener(this);
         pile.addActionListener(this);
-        pass.addActionListener(this);
-
-        totemPanel.add(totem, BorderLayout.CENTER);
-        mainPanel.add(play, BorderLayout.WEST);
-        cardsPanel.add(pass); cardsPanel.add(pile); cardsPanel.add(discard);
 
         this.setVisible(true);
     }
