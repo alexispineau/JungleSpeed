@@ -93,7 +93,7 @@ public class Server implements ServerInterface {
     		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>();
     		res.add(tabCardForOnePlayer);
     		for(int j=i*cardNumber;j<cardNumber*(i+1);j++) {
-    			res.get(i).add(new Card (tmpcrd.get(j),"src/main/resources/carte"+j+".png"));
+    			res.get(i).add(new Card (tmpcrd.get(j),"src/main/resources/carte"+tmpcrd.get(j)+".png"));
     		}
     	}
     	
@@ -128,6 +128,7 @@ public class Server implements ServerInterface {
                     	clientGagnant = true;
                         gagnant = client;
                         perdant = c;
+                        System.out.println("Bravo un joueur a gagné");
                         break;
                     }
             }
