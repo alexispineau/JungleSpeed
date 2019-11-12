@@ -46,15 +46,8 @@ public class JungleController {
         model.turnCard();
     }
 
-    public void passMyTurn() {
-        try {
-            model.passMyturn();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void takeTotem() {
-        model.setIHaveWin(true);
+        model.takeTotem();
     }
 
     public static void main(String[] args) {

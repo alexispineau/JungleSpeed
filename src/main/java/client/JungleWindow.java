@@ -73,9 +73,6 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         else if (event.getSource() == pile) {
             controller.turnCard();
         }
-        else if (event.getSource() == pass) {
-            controller.passMyTurn();
-        }
         else if (event.getSource() == totem) {
             controller.takeTotem();
         }

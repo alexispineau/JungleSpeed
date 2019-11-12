@@ -20,7 +20,6 @@ public interface ClientInterface extends Remote {
     public int getMyNbcard() throws RemoteException;
     public void setHand(ArrayList<Card> crds) throws RemoteException;
 	public ArrayList<Card> getPlayerStack() throws RemoteException;
-	public void passMyturn() throws RemoteException;
 	public void addListener(JungleListener listener) throws RemoteException;
 
 	public ClientInterface getNextPlayerInterface() throws RemoteException;
@@ -29,6 +28,7 @@ public interface ClientInterface extends Remote {
 	public ArrayList<Card> getPlayerDeck() throws RemoteException;
 	public boolean getIHaveWin() throws RemoteException;
 	public void setIHaveWin(boolean bl) throws RemoteException;
+	public String getName() throws RemoteException;
 
 
 

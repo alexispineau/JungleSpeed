@@ -108,60 +108,61 @@ public class Server implements ServerInterface {
     }
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
-        //TODO
-    	ArrayList<ClientInterface> allPlayers = new ArrayList<ClientInterface>();
-    	allPlayers.add(client.getPreviousPlayerInterface());
-    	allPlayers.add(client.getNextPlayerInterface());
-    	allPlayers.add(client.getThirdClientInterface());
+    	//TODO
+    	ArrayList<ClientInterface> otherPlayers = new ArrayList<ClientInterface>();
+    	otherPlayers.add(client.getPreviousPlayerInterface());
+    	otherPlayers.add(client.getNextPlayerInterface());
+    	otherPlayers.add(client.getThirdClientInterface());
     	
     	boolean clientGagnant = false;
-    	
-    	
-		 boolean estValide = false;
-            ClientInterface gagnant = null;
-            ClientInterface perdant = null;
-            Card carte = null;
 
-            // définition du gagnant et du perdant
-            for(ClientInterface c : allPlayers) {
-                    if(client.getBottomCard().getId() == c.getBottomCard().getId() && client != c) {
-                    	clientGagnant = true;
-                        gagnant = client;
-                        perdant = c;
-                        System.out.println("Bravo un joueur a gagné");
-                        break;
-                    }
-            }
-            if (clientGagnant == false) {
-            	perdant = client;
-            }
+    	boolean estValide = false;
+    	ClientInterface gagnant = null;
+    	ClientInterface perdant = null;
+    	Card carte = null;
+
+    	// définition du gagnant et du perdant
+		for(ClientInterface c : otherPlayers) {
+		 	int id1 = client.getBottomCard().getId();
+		 	int id2 = c.getBottomCard().getId();
+		 	System.out.println(id1 + " " + id2);
+		 	if(id1 == id2) {
+		 		clientGagnant = true;
+                gagnant = client;
+                perdant = c;
+                System.out.println("Bravo " + client.getName() +" a gagné");
+		 	}
+		}
+		if (!clientGagnant) {
+         	perdant = client;
+		}
             
-            // écganger des cartes
-            if(clientGagnant) {
-                while(gagnant.getPlayerStack().size() > 0) {
-                    carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
-                    gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
-                    perdant.getPlayerDeck().add(carte);
-                }
-            } else {
-                for(ClientInterface c : allPlayers) {
-                    if(c != client) {
-                    	while(c.getPlayerStack().size() > 0) {
-                            carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
-                            c.getPlayerStack().remove(c.getPlayerStack().size()-1);
-                            perdant.getPlayerDeck().add(carte);
-                        }
-                    }
-                }
-            }
+         // écganger des cartes
+		if(clientGagnant) {
+         	while(gagnant.getPlayerStack().size() > 0) {
+            	carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
+                gagnant.getPlayerStack().remove(gagnant.getPlayerStack().size()-1);
+                perdant.getPlayerDeck().add(carte);
+         	}
+		} else {
+         	for(ClientInterface c : otherPlayers) {
+         		if(c != client) {
+            		while(c.getPlayerStack().size() > 0) {
+            			carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
+            			c.getPlayerStack().remove(c.getPlayerStack().size()-1);
+            			perdant.getPlayerDeck().add(carte);
+            		}
+            	}
+         	}
+		}
             
-            // on vérifie si il y à un gagnant ou pas
-            allPlayers.add(client);
-	            for(ClientInterface c : allPlayers) {
-	            	if (c.getMyNbcard() <= 0)
-	            		//TODO envoyer un message aux autres players
-	            		c.setIHaveWin(true);
-	            }
+		// on vérifie si il y à un gagnant ou pas
+		otherPlayers.add(client);
+		for(ClientInterface c : otherPlayers) {
+			if (c.getMyNbcard() <= 0)
+	       		//TODO envoyer un message aux autres players
+	            c.setIHaveWin(true);
+		}
     }
     
     public String test() {
