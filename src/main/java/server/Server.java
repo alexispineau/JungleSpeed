@@ -143,8 +143,9 @@ public class Server implements ServerInterface {
          	while(gagnant.getPlayerStack().size() > 0) {
 				System.out.println("avant :"+gagnant.getPlayerStack().size());
             	carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
-                gagnant.getPlayerStack().remove(carte);
-                perdant.getPlayerDeck().add(carte);
+                gagnant.removeCardFromStack();
+                perdant.addCardFromStack(carte);
+                gagnant.updateListeners();
 				System.out.println("après :"+gagnant.getPlayerStack().size());
          	}
 		} else {
@@ -153,8 +154,9 @@ public class Server implements ServerInterface {
             		while(c.getPlayerStack().size() > 0) {
             			System.out.println("fdjkfd");
             			carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
-            			c.getPlayerStack().remove(c.getPlayerStack().size()-1);
-            			perdant.getPlayerDeck().add(carte);
+            			c.removeCardFromStack();
+            			perdant.addCardFromStack(carte);
+            			perdant.updateListeners();
             		}
             	}
          	}
