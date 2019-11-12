@@ -101,19 +101,21 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     	if(this.currentPlayer) {
     		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
     	}
-        this.currentPlayer = false;
     	this.passMyturn();
     	updateListeners();
     }
     
     // passe la main au joueur suivant
     private void passMyturn() {
-        try{
-            this.nextPlayer.setCurrentPlayer(true);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+    	if(this.currentPlayer) {
+    		this.currentPlayer = false;
+    		try{
+                this.nextPlayer.setCurrentPlayer(true);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+    	}
     }
 
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
