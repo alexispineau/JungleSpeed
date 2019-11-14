@@ -25,6 +25,7 @@ public interface ClientInterface extends Remote {
     public void removeCardFromStack() throws RemoteException;
     public void addCardFromStack(Card card) throws RemoteException;
     public void updateListeners() throws RemoteException;
+    public void gameOver() throws RemoteException;
 	public ClientInterface getNextPlayerInterface() throws RemoteException;
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException;
 	public ClientInterface getThirdClientInterface() throws RemoteException;

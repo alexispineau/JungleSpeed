@@ -127,6 +127,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
 	public ArrayList<Card> getPlayerDeck() {return this.playerStack;}
 
+	public void gameOver() {
+
+    }
 	public void removeCardFromStack() {
         if(this.playerStack.size() > 0) {
             System.out.println("La taille de la stack"+this.discardStack.size());

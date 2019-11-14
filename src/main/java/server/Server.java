@@ -10,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import client.ClientInterface;
 
@@ -133,7 +134,6 @@ public class Server implements ServerInterface {
 		 		clientGagnant = true;
                 gagnant = client;
                 perdant = c;
-                System.out.println("Bravo " + client.getName() +" a gagné");
 		 	}
 		}
 		if (!clientGagnant) {
@@ -141,30 +141,51 @@ public class Server implements ServerInterface {
 		}
             
          // écganger des cartes
-		System.out.println("ddfkldf1");
 		if(clientGagnant) {
-         	while(gagnant.getPlayerStack().size() > 0) {
-				System.out.println("avant :"+gagnant.getPlayerStack().size());
-            	carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
-                gagnant.removeCardFromStack();
-                perdant.addCardFromStack(carte);
-                gagnant.updateListeners();
-				System.out.println("après :"+gagnant.getPlayerStack().size());
-         	}
+			if(gagnant.getPlayerDeck().size() == 0) {
+				for(int i =0; i < 50; i++) {
+					System.out.println("LE "+gagnant.getName()+" A GAGNE !!!!!");
+					client.gameOver();
+					client.getPreviousPlayerInterface().gameOver();
+					client.getNextPlayerInterface().gameOver();
+					client.getThirdClientInterface().gameOver();
+				}
+
+
+			}
+			else {
+				while(gagnant.getPlayerStack().size() > 0) {
+					carte = gagnant.getPlayerStack().get(gagnant.getPlayerStack().size()-1);
+					gagnant.removeCardFromStack();
+					perdant.addCardFromStack(carte);
+					gagnant.updateListeners();
+				}
+			}
+
 		} else {
          	for(ClientInterface c : otherPlayers) {
          		if(c != client) {
-            		while(c.getPlayerStack().size() > 0) {
-            			System.out.println("fdjkfd");
-            			carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
-            			c.removeCardFromStack();
-            			perdant.addCardFromStack(carte);
-            			perdant.updateListeners();
-            		}
+         			if(c.getPlayerDeck().size() == 0) {
+						for(int i =0; i < 50; i++) {
+							System.out.println("LE "+c.getName()+" A GAGNE !!!!!");
+							client.gameOver();
+							client.getPreviousPlayerInterface().gameOver();
+							client.getNextPlayerInterface().gameOver();
+							client.getThirdClientInterface().gameOver();
+						}
+					}
+					else {
+						while(c.getPlayerStack().size() > 0) {
+							carte = c.getPlayerStack().get(c.getPlayerStack().size()-1);
+							c.removeCardFromStack();
+							perdant.addCardFromStack(carte);
+							perdant.updateListeners();
+						}
+					}
+
             	}
          	}
 		}
-		System.out.println("ddfkldf2");
             
 		// on vérifie si il y à un gagnant ou pas
 		otherPlayers.add(client);
