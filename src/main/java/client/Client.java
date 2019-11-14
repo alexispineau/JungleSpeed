@@ -90,6 +90,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     public int getMyNbcard() {
         return playerStack.size();
     }
+    public int getNbDiscard() {
+        return discardStack.size();
+    }
 
     public void setHand(ArrayList<Card> hand) {
         this.playerStack = (ArrayList<Card>)hand.clone();

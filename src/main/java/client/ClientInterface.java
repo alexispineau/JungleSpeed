@@ -34,6 +34,4 @@ public interface ClientInterface extends Remote {
 	public void setIHaveWin(boolean bl) throws RemoteException;
 	public String getName() throws RemoteException;
 
-
-
 }

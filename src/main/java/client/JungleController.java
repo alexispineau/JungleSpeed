@@ -64,6 +64,7 @@ public class JungleController {
                 ret = model.getThirdClientInterface();
             else if (model.getPreviousPlayerInterface().getClientID().equals(uuid))
                 ret = model.getPreviousPlayerInterface();
+            else ret = model;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,8 +81,18 @@ public class JungleController {
         return ret;
     }
 
-    public int getNbCards() {
-        return model.getMyNbcard();
+    public int getNbCards(UUID uuid) {
+        int ret = -1;
+        try {
+            ret = getClient(uuid).getMyNbcard();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public int getNbDiscard() {
+        return model.getNbDiscard();
     }
 
     public void turnCard() {
@@ -108,6 +119,25 @@ public class JungleController {
 
     public boolean getCurrentPlayer() {
         return model.getCurrentPlayer();
+    }
+
+    public boolean getCurrentPlayer(UUID uuid) {
+        boolean ret = false;
+        try {
+            ret = getClient(uuid).getCurrentPlayer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+    public UUID getID() {
+        UUID ret = null;
+        try {
+            ret = model.getClientID();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static void main(String[] args) {

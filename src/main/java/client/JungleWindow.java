@@ -11,19 +11,21 @@ import java.util.UUID;
 public class JungleWindow extends UnicastRemoteObject implements JungleListener, ActionListener {
 
     private JFrame frame;
-    private JButton totem, pile, play, discard;
+    private JButton totem, pile, play;
     private JungleController controller;
-    private JLabel player, j2, j3, j4, j2Card, j3Card, j4Card;
+    private JLabel player, j2, j3, j4, playerCard, j2Card, j3Card, j4Card, j2Restantes, j3Restantes, j4Restantes;
+    private UUID playerID;
 
     public JungleWindow(JungleController controller) throws RemoteException {
-        frame = new JFrame("Jungle Speed");
+        this.frame = new JFrame("Jungle Speed");
         this.controller = controller;
+        this.playerID = controller.getID();
         this.initWindow();
     }
 
     private void initWindow() {
         //this.setExtendedState(MAXIMIZED_BOTH);
-        frame.setSize(600, 400);
+        frame.setSize(700, 420);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
@@ -32,7 +34,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         frame.setContentPane(mainPanel);
 
         JPanel playPanel = new JPanel();
-        playPanel.setLayout(new GridLayout(2,1));
+        playPanel.setLayout(new GridLayout(3,1));
         JPanel gamePanel = new JPanel();
         gamePanel.setLayout(new BorderLayout());
         mainPanel.add(playPanel, BorderLayout.WEST);
@@ -57,8 +59,8 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         gamePanel.add(totem, BorderLayout.CENTER);
         play = new JButton("Jouer");
         playPanel.add(play);
-        pile =  new JButton(); discard = new JButton("Défausse");
-        playerPanel.add(pile); playerPanel.add(discard);
+        pile =  new JButton(); playerCard = new JLabel("Défausse");
+        playerPanel.add(pile); playerPanel.add(playerCard);
 
         play.addActionListener(this);
         totem.addActionListener(this);
@@ -72,12 +74,12 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         if (card != null) {
             path = card.getPicPath();
         }
-        this.discard.setIcon(new ImageIcon(path));
-        int n = controller.getNbCards();
-        this.discard.setText(n+" cartes");
+        this.playerCard.setIcon(new ImageIcon(path));
+        pile.setText(controller.getNbCards(playerID)+" cartes restantes");
+        playerCard.setText(controller.getNbDiscard()+" cartes");
     }
 
-    private void setOtherCard(JLabel label, Card card) {
+    private void setCard(JLabel label, Card card) {
         String path = "src/main/resources/nocard.png";
         if (card != null) {
             path = card.getPicPath();
@@ -85,8 +87,11 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         label.setIcon(new ImageIcon(path));
     }
 
-    private void setCurrentPlayer() {
-
+    private void setCurrentPlayer(JLabel label, boolean current) {
+        if (current)
+            label.setForeground(Color.BLACK);
+        else
+            label.setForeground(Color.GRAY);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -105,7 +110,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         System.out.println("+++ startGame() : cc");
         this.controller.addListener(this);
         this.pile.setIcon(new ImageIcon("src/main/resources/carteverso.png"));
-        this.discard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
+        this.playerCard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
         UUID[] ids = controller.getPlayersIDs();
         this.j2.setText(controller.getName(ids[0]));
         this.j3.setText(controller.getName(ids[1]));
@@ -114,12 +119,18 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
 
     public void update() throws RemoteException {
         System.out.println("  * update()");
-        pile.setText(controller.getNbCards()+" cartes restantes");
-        setCard(controller.getBottomCard());
         UUID[] ids = controller.getPlayersIDs();
-        setOtherCard(j2Card, controller.getCard(ids[0]));
-        setOtherCard(j3Card, controller.getCard(ids[1]));
-        setOtherCard(j4Card, controller.getCard(ids[2]));
+        setCard(controller.getBottomCard());
+        setCard(j2Card, controller.getCard(ids[0]));
+        setCard(j3Card, controller.getCard(ids[1]));
+        setCard(j4Card, controller.getCard(ids[2]));
+        setCurrentPlayer(player, controller.getCurrentPlayer(playerID));
+        setCurrentPlayer(j2, controller.getCurrentPlayer(ids[0]));
+        setCurrentPlayer(j3, controller.getCurrentPlayer(ids[1]));
+        setCurrentPlayer(j4, controller.getCurrentPlayer(ids[2]));
+        /*j2Restantes.setText(controller.getNbCards(ids[0])+"Cartes restantes");
+        j3Restantes.setText(controller.getNbCards(ids[1])+"Cartes restantes");
+        j4Restantes.setText(controller.getNbCards(ids[2])+"Cartes restantes");*/
     }
 
 }
