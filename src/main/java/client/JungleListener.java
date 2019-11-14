@@ -1,8 +1,11 @@
 package client;
 
-public interface JungleListener {
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-    public void startGame();
-    public void update();
+public interface JungleListener extends Remote {
+
+    public void startGame() throws RemoteException;
+    public void update() throws RemoteException;
 
 }

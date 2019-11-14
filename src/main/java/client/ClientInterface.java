@@ -3,11 +3,12 @@ package client;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public interface ClientInterface extends Remote {
 
 	// méthode nul juste pour tester
-	public int getClientID() throws RemoteException;
+	public UUID getClientID() throws RemoteException;
 	public String testClient(String text) throws RemoteException;
     public void setNextPlayer(ClientInterface player ) throws RemoteException;
     // Moi je pense qu'il faut supprimer cette méthode^^

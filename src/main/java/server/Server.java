@@ -1,6 +1,7 @@
 package server;
 
 import client.Card;
+import client.Client;
 import client.ClientInterface;
 
 import java.rmi.Naming;
@@ -52,7 +53,6 @@ public class Server implements ServerInterface {
     	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
     	    		clientsInMatchMaking.get(i).setNextPlayer(clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame));
     	    		clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clientsInMatchMaking.get(i));
-    	    		clientsInMatchMaking.get(i).setHand(crds.get(i));
     	    		System.out.println("The player " + clientsInMatchMaking.get(i).getClientID() +" has for next player " + clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).getClientID());
     	    		System.out.println("The player " + clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).getClientID() +" has for previous player " + clientsInMatchMaking.get(i).getClientID());
 
@@ -60,6 +60,9 @@ public class Server implements ServerInterface {
     		    		clientsInMatchMaking.get(i).setCurrentPlayer(true);
     		    	}
     	    	}
+    	    	for (int i=0;i<nbMAXPlayerInGame;i++) {
+					clientsInMatchMaking.get(i).setHand(crds.get(i));
+				}
     	    	cpt = 0;   		
     	    	//notifyAll();
     	    	System.out.println("Lancement du jeu vidéal");

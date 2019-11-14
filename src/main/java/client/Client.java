@@ -6,13 +6,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.UUID;
 
 import server.Server;
 import server.ServerInterface;
 
 public class Client extends UnicastRemoteObject implements ClientInterface {
 
-	public int clientID;
+    private UUID clientID;
 	private ServerInterface server;
     public ClientInterface nextPlayer;
     public ClientInterface previousPlayer;
@@ -24,7 +25,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private ArrayList<JungleListener> listeners;
     private String name;
     
-    public int getClientID() throws RemoteException {return clientID;}
+    public UUID getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException { return previousPlayer;}
 	public ClientInterface getThirdClientInterface() throws RemoteException { return nextPlayer.getNextPlayerInterface();}
@@ -92,8 +93,12 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 
     public void setHand(ArrayList<Card> hand) {
         this.playerStack = (ArrayList<Card>)hand.clone();
-        for (JungleListener l : listeners) {
-            l.startGame();
+        try {
+            for (JungleListener l : listeners) {
+                l.startGame();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -136,7 +141,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 	// Envoie un signal au serveur pour signifier que je veux jouer
 	public void iWantPlay(int localPort) {
 		try {
-			clientID = localPort;
+			clientID = UUID.randomUUID();
 			// connection au serveur
             server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
             System.out.println("Interface server récuppérée");
@@ -166,15 +171,23 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         }
     }
 
-	public void addListener(JungleListener listener) throws RemoteException{
+	public void addListener(JungleListener listener) throws RemoteException {
+        System.out.println("  + addListener("+listener+") : ajout du listener dans la liste");
+        System.out.println(listeners.size());
         this.listeners.add(listener);
+        System.out.println(listeners.size());
+        System.out.println(" /+");
     }
 
     public void updateListeners() {
         System.out.println(" ** updateListeners()");
-        for (JungleListener l : listeners) {
-            System.out.println(" ** updateListeners() : on va update un listener");
-            l.update();
+        try {
+            for (JungleListener l : listeners) {
+                System.out.println(" ** updateListeners() : on va update un listener");
+                l.update();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 	

@@ -4,28 +4,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.UUID;
 
-public class JungleWindow extends JFrame implements JungleListener, ActionListener {
+public class JungleWindow extends UnicastRemoteObject implements JungleListener, ActionListener {
 
+    private JFrame frame;
     private JButton totem, pile, play, discard;
     private JungleController controller;
     private JLabel player, j2, j3, j4, j2Card, j3Card, j4Card;
 
-    public JungleWindow(JungleController controller) {
-        super("Jungle Speed");
+    public JungleWindow(JungleController controller) throws RemoteException {
+        frame = new JFrame("Jungle Speed");
         this.controller = controller;
         this.initWindow();
     }
 
     private void initWindow() {
         //this.setExtendedState(MAXIMIZED_BOTH);
-        this.setSize(600, 400);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        this.setContentPane(mainPanel);
+        frame.setContentPane(mainPanel);
 
         JPanel playPanel = new JPanel();
         playPanel.setLayout(new GridLayout(2,1));
@@ -60,7 +64,7 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         totem.addActionListener(this);
         pile.addActionListener(this);
 
-        this.setVisible(true);
+        frame.setVisible(true);
     }
 
     private void setCard(Card card) {
@@ -97,24 +101,25 @@ public class JungleWindow extends JFrame implements JungleListener, ActionListen
         }
     }
 
-    public void startGame() {
+    public void startGame() throws RemoteException {
+        System.out.println("+++ startGame() : cc");
         this.controller.addListener(this);
         this.pile.setIcon(new ImageIcon("src/main/resources/carteverso.png"));
         this.discard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
-        String[] names = controller.getOthersName();
-        this.j2.setText(names[0]);
-        this.j3.setText(names[1]);
-        this.j4.setText(names[2]);
+        UUID[] ids = controller.getPlayersIDs();
+        this.j2.setText(controller.getName(ids[0]));
+        this.j3.setText(controller.getName(ids[1]));
+        this.j4.setText(controller.getName(ids[2]));
     }
 
-    public void update() {
+    public void update() throws RemoteException {
         System.out.println("  * update()");
         pile.setText(controller.getNbCards()+" cartes restantes");
         setCard(controller.getBottomCard());
-        Card[] cards = controller.getOthersCards();
-        setOtherCard(j2Card, cards[0]);
-        setOtherCard(j3Card, cards[1]);
-        setOtherCard(j4Card, cards[2]);
+        UUID[] ids = controller.getPlayersIDs();
+        setOtherCard(j2Card, controller.getCard(ids[0]));
+        setOtherCard(j3Card, controller.getCard(ids[1]));
+        setOtherCard(j4Card, controller.getCard(ids[2]));
     }
 
 }
