@@ -22,8 +22,8 @@ public class JungleController {
         }
     }
 
-    public void wantPlay() {
-        model.iWantPlay(port);
+    public void wantPlay(String name) {
+        model.iWantPlay(port, name);
     }
 
     public void addListener(JungleListener listener) {

@@ -145,8 +145,9 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         this.playerStack.add(card);
     }
 	// Envoie un signal au serveur pour signifier que je veux jouer
-	public void iWantPlay(int localPort) {
+	public void iWantPlay(int localPort, String nom) {
 		try {
+		    if (!nom.equals("")) this.name = nom;
 			clientID = UUID.randomUUID();
 			// connection au serveur
             server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");

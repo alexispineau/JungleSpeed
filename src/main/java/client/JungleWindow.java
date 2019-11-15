@@ -14,6 +14,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
     private JButton totem, pile, play;
     private JungleController controller;
     private JLabel player, j2, j3, j4, playerCard, j2Card, j3Card, j4Card, j2Restantes, j3Restantes, j4Restantes;
+    private JTextField field;
     private UUID playerID;
 
     public JungleWindow(JungleController controller) throws RemoteException {
@@ -59,6 +60,8 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         gamePanel.add(totem, BorderLayout.CENTER);
         play = new JButton("Jouer");
         playPanel.add(play);
+        field = new JTextField();
+        playPanel.add(field);
         pile =  new JButton(); playerCard = new JLabel("Défausse");
         playerPanel.add(pile); playerPanel.add(playerCard);
 
@@ -96,7 +99,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
 
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == play) {
-            controller.wantPlay();
+            controller.wantPlay(field.getText());
         }
         else if (event.getSource() == pile) {
             controller.turnCard();
@@ -112,9 +115,11 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         this.pile.setIcon(new ImageIcon("src/main/resources/carteverso.png"));
         this.playerCard.setIcon(new ImageIcon("src/main/resources/nocard.png"));
         UUID[] ids = controller.getPlayersIDs();
+        this.player.setText(controller.getName());
         this.j2.setText(controller.getName(ids[0]));
         this.j3.setText(controller.getName(ids[1]));
         this.j4.setText(controller.getName(ids[2]));
+        update();
     }
 
     public void update() throws RemoteException {
