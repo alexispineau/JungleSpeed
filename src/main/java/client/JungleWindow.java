@@ -42,9 +42,9 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         mainPanel.add(gamePanel, BorderLayout.CENTER);
 
         JPanel playerPanel = new JPanel(); playerPanel.setLayout(new GridLayout(1,3));
-        JPanel p2Panel = new JPanel(); p2Panel.setLayout(new GridLayout(2,1));
-        JPanel p3Panel = new JPanel(); p3Panel.setLayout(new GridLayout(1,2));
-        JPanel p4Panel = new JPanel(); p4Panel.setLayout(new GridLayout(2,1));
+        JPanel p2Panel = new JPanel(); p2Panel.setLayout(new GridLayout(3,1));
+        JPanel p3Panel = new JPanel(); p3Panel.setLayout(new GridLayout(1,3));
+        JPanel p4Panel = new JPanel(); p4Panel.setLayout(new GridLayout(3,1));
         gamePanel.add(playerPanel, BorderLayout.SOUTH);
         gamePanel.add(p2Panel, BorderLayout.WEST);
         gamePanel.add(p3Panel, BorderLayout.NORTH);
@@ -54,6 +54,8 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         playerPanel.add(player);
         j2 = new JLabel("j2"); j3 = new JLabel("j3"); j4 = new JLabel("j4");
         p2Panel.add(j2); p3Panel.add(j3); p4Panel.add(j4);
+        j2Restantes = new JLabel(); j3Restantes = new JLabel(); j4Restantes = new JLabel();
+        p2Panel.add(j2Restantes); p3Panel.add(j3Restantes); p4Panel.add(j4Restantes);
         j2Card = new JLabel(); j3Card = new JLabel(); j4Card = new JLabel();
         p2Panel.add(j2Card); p3Panel.add(j3Card); p4Panel.add(j4Card);
         totem = new JButton("TOTEM");
@@ -133,9 +135,9 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         setCurrentPlayer(j2, controller.getCurrentPlayer(ids[0]));
         setCurrentPlayer(j3, controller.getCurrentPlayer(ids[1]));
         setCurrentPlayer(j4, controller.getCurrentPlayer(ids[2]));
-        /*j2Restantes.setText(controller.getNbCards(ids[0])+"Cartes restantes");
+        j2Restantes.setText(controller.getNbCards(ids[0])+"Cartes restantes");
         j3Restantes.setText(controller.getNbCards(ids[1])+"Cartes restantes");
-        j4Restantes.setText(controller.getNbCards(ids[2])+"Cartes restantes");*/
+        j4Restantes.setText(controller.getNbCards(ids[2])+"Cartes restantes");
     }
 
 }

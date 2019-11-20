@@ -28,11 +28,8 @@ public class JungleController {
 
     public void addListener(JungleListener listener) {
         try {
-            System.out.println(" ++ addListener("+model.getName()+") : next");
             model.getNextPlayerInterface().addListener(listener);
-            System.out.println(" ++ addListener("+model.getName()+") : third");
             model.getThirdClientInterface().addListener(listener);
-            System.out.println(" ++ addListener("+model.getName()+") : previous");
             model.getPreviousPlayerInterface().addListener(listener);
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +139,6 @@ public class JungleController {
 
     public static void main(String[] args) {
         try {
-            System.out.println("Création des clients");
             new JungleController(8100, 1);
             new JungleController(8101, 2);
             new JungleController(8102, 3);
