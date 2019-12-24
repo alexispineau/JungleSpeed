@@ -23,6 +23,7 @@ public class Server implements ServerInterface {
 
     public Server() {
         super();
+        // Initialisation of the Match Making ArrayList
         clientsInMatchMaking = new  ArrayList<ClientInterface>();
     }
 
@@ -36,14 +37,7 @@ public class Server implements ServerInterface {
              cpt++;
         	// traitement pour les 3 premiers appels
         	if (cpt < nbMAXPlayerInGame) {
-        		//try{
         			System.out.println("SERVER Le client : "+clientAdress+" entre en MM");
-        			//wait();
-       
-        		//}
-        		//catch(Exception e) {
-        		//	e.printStackTrace();
-        		//}
         	}
         	// traitement pour le 4 eme appel
         	else {
@@ -65,7 +59,6 @@ public class Server implements ServerInterface {
 					clientsInMatchMaking.get(i).setHand(crds.get(i));
 				}
     	    	cpt = 0;   		
-    	    	//notifyAll();
     	    	System.out.println("Lancement du jeu vidéal");
         	}
          }
@@ -74,6 +67,7 @@ public class Server implements ServerInterface {
          }
     }     
     
+    // Shuffle then distribute the cards according to the number of players
     private static ArrayList<ArrayList<Card>> melange(int cardNumber, int nbPlayer){
     	ArrayList<ArrayList<Card>> res = new ArrayList<ArrayList<Card>>(nbPlayer);
     	ArrayList<Integer> tmpcrd = new ArrayList<Integer>(cardNumber*nbPlayer);
@@ -83,6 +77,7 @@ public class Server implements ServerInterface {
     		}
     	}
     	
+    	// Shuffle all Cards
     	for (int i=0;i<1000;i++) {
     		int nombreAleatoire = (int)(Math.random() * ((cardNumber*nbPlayer)));
     		int nombreAleatoire2 = (int)(Math.random() * ((cardNumber*nbPlayer)));
@@ -92,7 +87,7 @@ public class Server implements ServerInterface {
     		tmpcrd.set(nombreAleatoire2,tmp);
 
     	}
-    	
+    	// Distribute the cards according to the number of players
     	for(int i=0;i<nbPlayer;i++) {
     		ArrayList<Card> tabCardForOnePlayer = new ArrayList<Card>();
     		res.add(tabCardForOnePlayer);
@@ -100,19 +95,11 @@ public class Server implements ServerInterface {
     			res.get(i).add(new Card (tmpcrd.get(j),"src/main/resources/carte"+tmpcrd.get(j)+".png"));
     		}
     	}
-    	
-    	for(int i=0;i<nbPlayer;i++) {
-    		System.out.print("tab number : "+ (i+1) +" --> ");
-    		for(int j=0;j<cardNumber;j++) {
-    			System.out.print(res.get(i).get(j).getId() + " ,");
-    		}
-    		System.out.println();
-    	}
     	return res;
     }
 
     public void takeTheTotem(ClientInterface client) throws RemoteException {
-    	//TODO
+    	
     	ArrayList<ClientInterface> otherPlayers = new ArrayList<ClientInterface>();
     	otherPlayers.add(client.getPreviousPlayerInterface());
     	otherPlayers.add(client.getNextPlayerInterface());
@@ -191,13 +178,9 @@ public class Server implements ServerInterface {
 		otherPlayers.add(client);
 		for(ClientInterface c : otherPlayers) {
 			if (c.getMyNbcard() <= 0)
-	       		//TODO envoyer un message aux autres players
+	       		//envoyer un message aux autres players
 	            c.setIHaveWin(true);
 		}
-    }
-    
-    public String test() {
-    	return "Test de qualité";
     }
 
     public static void main(String[] args) {
@@ -208,7 +191,7 @@ public class Server implements ServerInterface {
             ServerInterface stub =
                     (ServerInterface) UnicastRemoteObject.exportObject(server, 0);
             Naming.rebind(name,stub);
-            System.out.println("Bravo le serveur a été démarré avec succès lol");
+            System.out.println("Bravo le serveur a été démarré avec succès");
             
             melange(17,3);
         } catch (Exception e) {
