@@ -43,12 +43,12 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
 
         JPanel playerPanel = new JPanel(); playerPanel.setLayout(new GridLayout(1,3));
         JPanel p2Panel = new JPanel(); p2Panel.setLayout(new GridLayout(3,1));
-        JPanel p3Panel = new JPanel(); p3Panel.setLayout(new GridLayout(1,3));
+        JPanel p3Panel = new JPanel(); p3Panel.setLayout(new GridLayout(3,1));
         JPanel p4Panel = new JPanel(); p4Panel.setLayout(new GridLayout(3,1));
         gamePanel.add(playerPanel, BorderLayout.SOUTH);
-        gamePanel.add(p2Panel, BorderLayout.WEST);
-        gamePanel.add(p3Panel, BorderLayout.NORTH);
-        gamePanel.add(p4Panel, BorderLayout.EAST);
+        JPanel pPanel = new JPanel(); pPanel.setLayout(new GridLayout(1,3));
+        gamePanel.add(pPanel, BorderLayout.NORTH);
+        pPanel.add(p2Panel); pPanel.add(p3Panel); pPanel.add(p4Panel);
 
         player = new JLabel(controller.getName());
         playerPanel.add(player);
@@ -58,7 +58,8 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         p2Panel.add(j2Restantes); p3Panel.add(j3Restantes); p4Panel.add(j4Restantes);
         j2Card = new JLabel(); j3Card = new JLabel(); j4Card = new JLabel();
         p2Panel.add(j2Card); p3Panel.add(j3Card); p4Panel.add(j4Card);
-        totem = new JButton("TOTEM");
+        totem = new JButton();
+        totem.setIcon(new ImageIcon("src/main/resources/totem.png"));
         gamePanel.add(totem, BorderLayout.CENTER);
         play = new JButton("Jouer");
         playPanel.add(play);
