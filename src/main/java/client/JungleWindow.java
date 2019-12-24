@@ -13,9 +13,11 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
     private JFrame frame;
     private JButton totem, pile, play;
     private JungleController controller;
-    private JLabel player, j2, j3, j4, playerCard, j2Card, j3Card, j4Card, j2Restantes, j3Restantes, j4Restantes;
+    private JLabel player, j2, j3, j4, playerCard, j2Card, j3Card, j4Card,
+            j2Restantes, j3Restantes, j4Restantes, etat;
     private JTextField field;
     private UUID playerID;
+    private Color darkGreen = new Color(30,130,30);
 
     public JungleWindow(JungleController controller) throws RemoteException {
         this.frame = new JFrame("Jungle Speed");
@@ -35,7 +37,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         frame.setContentPane(mainPanel);
 
         JPanel playPanel = new JPanel();
-        playPanel.setLayout(new GridLayout(3,1));
+        playPanel.setLayout(new GridLayout(4,1));
         JPanel gamePanel = new JPanel();
         gamePanel.setLayout(new BorderLayout());
         mainPanel.add(playPanel, BorderLayout.WEST);
@@ -64,7 +66,10 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         play = new JButton("Jouer");
         playPanel.add(play);
         field = new JTextField();
+        playPanel.add(new JLabel("Nom : "));
         playPanel.add(field);
+        etat = new JLabel();
+        playPanel.add(etat);
         pile =  new JButton(); playerCard = new JLabel("Défausse");
         playerPanel.add(pile); playerPanel.add(playerCard);
 
@@ -95,7 +100,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
 
     private void setCurrentPlayer(JLabel label, boolean current) {
         if (current)
-            label.setForeground(Color.BLACK);
+            label.setForeground(darkGreen);
         else
             label.setForeground(Color.GRAY);
     }
@@ -103,6 +108,7 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == play) {
             controller.wantPlay(field.getText());
+            etat.setText("En attente de joueurs");
         }
         else if (event.getSource() == pile) {
             controller.turnCard();
@@ -133,6 +139,12 @@ public class JungleWindow extends UnicastRemoteObject implements JungleListener,
         setCard(j3Card, controller.getCard(ids[1]));
         setCard(j4Card, controller.getCard(ids[2]));
         setCurrentPlayer(player, controller.getCurrentPlayer(playerID));
+        if (controller.getCurrentPlayer(playerID)) {
+            etat.setText("À vous de jouer");
+        }
+        else {
+            etat.setText("");
+        }
         setCurrentPlayer(j2, controller.getCurrentPlayer(ids[0]));
         setCurrentPlayer(j3, controller.getCurrentPlayer(ids[1]));
         setCurrentPlayer(j4, controller.getCurrentPlayer(ids[2]));
