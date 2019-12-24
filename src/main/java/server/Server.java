@@ -31,13 +31,13 @@ public class Server implements ServerInterface {
     	 try {
     		 // connection with the client interface which called the joinGame method
     		 ClientInterface client = (ClientInterface) Naming.lookup(clientAdress);
-             System.out.println("SERCER Connexion au clien : "+clientAdress);
+             System.out.println("SERVER Connexion au clien : "+clientAdress);
              // adding the client interface to a queue
              this.clientsInMatchMaking.add(client);
              cpt++;
         	// treatment for the first 3 calls
         	if (cpt < nbMAXPlayerInGame) {
-        			System.out.println("SERVER Le client : "+clientAdress+" entre en MM");
+        			System.out.println("SERVER Le client : "+clientAdress+" entre en Match Making");
         	}
         	// treatment for the 4th call
         	else {
@@ -59,7 +59,7 @@ public class Server implements ServerInterface {
 					clientsInMatchMaking.get(i).setHand(crds.get(i));
 				}
     	    	cpt = 0;   		
-    	    	System.out.println("Lancement du jeu vidéal");
+    	    	System.out.println("Lancement de la partie");
         	}
          }
     	 catch (Exception e) {
