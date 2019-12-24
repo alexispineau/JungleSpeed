@@ -143,7 +143,6 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
 			// server connection
             server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
             System.out.println("Interface server récuppérée");
-            System.out.println(server.test());
             
             // mise à disposition de l'interface du client
             String name = "//127.0.0.1:"+localPort+"/Client";
