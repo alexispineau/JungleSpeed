@@ -13,52 +13,40 @@ import server.ServerInterface;
 
 public class Client extends UnicastRemoteObject implements ClientInterface {
 
-    private UUID clientID;
-	private ServerInterface server;
-    public ClientInterface nextPlayer;
-    public ClientInterface previousPlayer;
-    private ArrayList<Card> playerStack; // Cartes non joués
-    private ArrayList<Card> discardStack; // Cartes joués
-    private Card card;
-    private boolean currentPlayer; // vrai si ce client est le joueur courant
-    private boolean iHaveWin = false;
+    private UUID clientID; // Client Unique ID
+	private ServerInterface server; // server interface for communication
+    public ClientInterface nextPlayer; // Client next player interface for communication
+    public ClientInterface previousPlayer; // Client previous player interface for communication
+    private ArrayList<Card> playerStack; // Unplayed cards
+    private ArrayList<Card> discardStack; // played cards
+    private Card card; // Card at the bottom of discardStack
+    private boolean currentPlayer; // True if this is the current Player
+    private boolean iHaveWin = false; // True if i have win the game
     private ArrayList<JungleListener> listeners;
-    private String name;
+    private String name; // The player Name
     
+    // CLient constructor
+    public Client(String name) throws RemoteException {
+        this.listeners = new ArrayList<JungleListener>();
+        this.discardStack = new ArrayList<Card>();
+        this.name = name;
+    }
+    
+    // getter List
     public UUID getClientID() throws RemoteException {return clientID;}
 	public ClientInterface getNextPlayerInterface() throws RemoteException { return nextPlayer;}
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException { return previousPlayer;}
 	public ClientInterface getThirdClientInterface() throws RemoteException { return nextPlayer.getNextPlayerInterface();}
 	public boolean getIHaveWin() {return iHaveWin;}
 	public void setIHaveWin(boolean bl) {iHaveWin = bl;}
-
-    public Client(String name) throws RemoteException {
-        this.listeners = new ArrayList<JungleListener>();
-        this.discardStack = new ArrayList<Card>();
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-    public String testClient(String text) {return text;}
-
-    public void setNextPlayer(ClientInterface nextPlayer) {
-        this.nextPlayer = nextPlayer;
-    }
-
-    public void setPreviousPlayer(ClientInterface previousPlayer) {
-        this.previousPlayer = previousPlayer;
-    }
-    
-    public boolean getCurrentPlayer() {
-    	return this.currentPlayer;
-    }
-    public void setCurrentPlayer(boolean cur) {
-    	this.currentPlayer = cur;
-    }
-
-    public Card getBottomCardOfNextPlayer() {
+	public String getName() {return this.name;}
+	public boolean getCurrentPlayer() {return this.currentPlayer;}
+	public int getMyNbcard() {return playerStack.size();}
+    public int getNbDiscard() {return discardStack.size();}
+    public ArrayList<Card> getPlayerStack() {return this.discardStack;}
+	public ArrayList<Card> getPlayerDeck() {return this.playerStack;}
+	
+	public Card getBottomCardOfNextPlayer() {
         Card ret = null;
         try {
             ret = this.nextPlayer.getBottomCard();
@@ -68,8 +56,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         }
         return ret;
     }
-
-    public int getNbCardOfNextPlayer() {
+	
+	public int getNbCardOfNextPlayer() {
         int ret = -1;
         try {
             ret =  this.nextPlayer.getMyNbcard();
@@ -77,34 +65,36 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             e.printStackTrace();
         }
         return ret;
-    }
-
-    public Card getBottomCard() {
+	 }
+	
+	public Card getBottomCard() {
         Card ret = null;
         if (!discardStack.isEmpty()) {
             ret = this.discardStack.get(this.discardStack.size()-1);
         }
         return ret;
     }
+	
+	//SetterList
+	 public void setNextPlayer(ClientInterface nextPlayer) {this.nextPlayer = nextPlayer;}
+	 public void setPreviousPlayer(ClientInterface previousPlayer) {this.previousPlayer = previousPlayer;}
+	 public void setCurrentPlayer(boolean cur) {this.currentPlayer = cur;}
+	 
+	 public void setHand(ArrayList<Card> hand) {
+	        this.playerStack = (ArrayList<Card>)hand.clone();
+	        try {
+	            for (JungleListener l : listeners) {
+	                l.startGame();
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-    public int getMyNbcard() {
-        return playerStack.size();
-    }
-    public int getNbDiscard() {
-        return discardStack.size();
-    }
+	 public String testClient(String text) {return text;}
 
-    public void setHand(ArrayList<Card> hand) {
-        this.playerStack = (ArrayList<Card>)hand.clone();
-        try {
-            for (JungleListener l : listeners) {
-                l.startGame();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
+	 // Take on card of playerStack and put them on discardStack
     public void turnCard() {
     	if(this.currentPlayer) {
     		this.discardStack.add(this.playerStack.remove(this.playerStack.size()-1));
@@ -114,7 +104,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     	updateListeners();
     }
     
-    // passe la main au joueur suivant
+    // pass the hand to the next player
     private void passMyturn() {
     	if(this.currentPlayer) {
     		this.currentPlayer = false;
@@ -127,12 +117,11 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     	}
     }
 
-	public ArrayList<Card> getPlayerStack() {return this.discardStack;}
-	public ArrayList<Card> getPlayerDeck() {return this.playerStack;}
-
 	public void gameOver() {
 
     }
+	
+	// remove the last Card of the discardStack
 	public void removeCardFromStack() {
         if(this.playerStack.size() > 0) {
             System.out.println("La taille de la stack"+this.discardStack.size());
@@ -140,16 +129,18 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         }
 
     }
-
+	
+	// add a Card at the bootom of playerStack
     public void addCardFromStack(Card card) {
         this.playerStack.add(card);
     }
-	// Envoie un signal au serveur pour signifier que je veux jouer
+    
+	// Send a signal to the Serve, for say that this Client Want play
 	public void iWantPlay(int localPort, String nom) {
 		try {
 		    if (!nom.equals("")) this.name = nom;
 			clientID = UUID.randomUUID();
-			// connection au serveur
+			// server connection
             server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
             System.out.println("Interface server récuppérée");
             System.out.println(server.test());
@@ -163,13 +154,14 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
             Naming.rebind(name,client);
             System.out.println("Client"+" "+localPort+""+ "lancé");
             
-            //Appel à la méthode joinGame du serveur pour commencer une partie
+            //call the joinGame method from server to start the game
             server.joinGame(name);
         } catch (Exception e) {
             e.printStackTrace();
         }
 	}
-
+	
+	// Send to the Server that The client take the JungleSpeed Totem
 	public void takeTotem() {
         try {
             server.takeTheTotem(this);
@@ -199,30 +191,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
 	
 	public static void main(String[] args) throws RemoteException {
-		/*
-        try {
-            ServerInterface server = (ServerInterface) Naming.lookup("//127.0.0.1:8090/Server");
-            System.out.println("CLient lancé");
-            System.out.println(server.test());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-		try {/*
-			Client firstClient = new Client();
-			firstClient.IWantPlay(8100);
-			
-			Client secondClient = new Client();
-			secondClient.IWantPlay(8101);
-			
-			Client thirdClient = new Client();
-			thirdClient.IWantPlay(8102);
-			
-			Client fourClient = new Client();
-			fourClient.IWantPlay(8103);
-			
-			System.out.println(firstClient.previousPlayer.testClient("Test de com avec le previous"));
-			System.out.println(firstClient.nextPlayer.testClient("test de com avec le next"));*/
+		try {
 			ArrayList<Integer> test = new ArrayList<Integer>();
 			for (int i=0;i<10;i++) { test.add(i); }
 			System.out.println("Taille du tableau test après 10 add : "+test.size());
