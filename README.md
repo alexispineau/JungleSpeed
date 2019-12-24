@@ -1,7 +1,6 @@
 # JungleSpeed
+Alexis Loret, Alexis Pineau, Louis Questel
 
-Salut on fait la bise ?
+Implémentation du jeu 'Jungle Speed' avec Java RMI
 
-Non je suis malade
-
-Carlos dab
+* Comment lancer le jeu
