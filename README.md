@@ -8,3 +8,5 @@ Implémentation du jeu 'Jungle Speed' avec Java RMI
   Pour lancer le serveur exécutez la classe Serveur du package server
   * Clients
   Pour lancer un client, exécutez la classe LaunchClient du package client, pour lancer 4 clients simultanément en local, afin de tester plus facilement le jeu, exécutez la classe Launch4Clients du package client.
+  
+Vous pouvez trouver les règles du jeu sur cette page : https://fr.wikipedia.org/wiki/Jungle_Speed
