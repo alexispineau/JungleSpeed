@@ -29,22 +29,22 @@ public class Server implements ServerInterface {
 
     public synchronized void joinGame(String clientAdress) throws RemoteException {
     	 try {
-    		 // connection avec l'interface du client qui à appelé la méthode joinGame
+    		 // connection with the client interface which called the joinGame method
     		 ClientInterface client = (ClientInterface) Naming.lookup(clientAdress);
              System.out.println("SERCER Connexion au clien : "+clientAdress);
-             // ajout de l'interface client dans une fille d'attente
+             // adding the client interface to a queue
              this.clientsInMatchMaking.add(client);
              cpt++;
-        	// traitement pour les 3 premiers appels
+        	// treatment for the first 3 calls
         	if (cpt < nbMAXPlayerInGame) {
         			System.out.println("SERVER Le client : "+clientAdress+" entre en MM");
         	}
-        	// traitement pour le 4 eme appel
+        	// treatment for the 4th call
         	else {
     	    	ArrayList<ArrayList<Card>> crds = new ArrayList<ArrayList<Card>>(nbMAXPlayerInGame);
     	    	crds = melange(17,nbMAXPlayerInGame);
     	    		
-    	    	// initialisation de joueur précédent et suivant pour chaque joueur + définition du joueru courant
+    	    	// initialization of previous and next player for each player + definition of the current player
     	    	for(int i=0;i<nbMAXPlayerInGame;i++) {
     	    		clientsInMatchMaking.get(i).setNextPlayer(clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame));
     	    		clientsInMatchMaking.get((i+1)%nbMAXPlayerInGame).setPreviousPlayer(clientsInMatchMaking.get(i));
@@ -112,7 +112,7 @@ public class Server implements ServerInterface {
     	ClientInterface perdant = null;
     	Card carte = null;
 
-    	// définition du gagnant et du perdant
+    	// definition of winner and loser
 		for(ClientInterface c : otherPlayers) {
 		 	int id1 = client.getBottomCard().getId();
 		 	int id2 = c.getBottomCard().getId();
@@ -127,7 +127,7 @@ public class Server implements ServerInterface {
          	perdant = client;
 		}
             
-         // écganger des cartes
+         // exchange cards
 		if(clientGagnant) {
 			if(gagnant.getPlayerDeck().size() == 0) {
 				for(int i =0; i < 50; i++) {
@@ -174,16 +174,17 @@ public class Server implements ServerInterface {
          	}
 		}
             
-		// on vérifie si il y à un gagnant ou pas
+		// we check if there is a winner or not
 		otherPlayers.add(client);
 		for(ClientInterface c : otherPlayers) {
 			if (c.getMyNbcard() <= 0)
-	       		//envoyer un message aux autres players
+	       		// send a message to other players
 	            c.setIHaveWin(true);
 		}
     }
 
     public static void main(String[] args) {
+    	// Initialization of the RMI interface of the server and provision on a port
         try {
             String name = "//127.0.0.1:8090/Server";
             LocateRegistry.createRegistry(8090);
