@@ -7,16 +7,11 @@ import java.util.UUID;
 
 public interface ClientInterface extends Remote {
 
-	// méthode nul juste pour tester
 	public UUID getClientID() throws RemoteException;
-	public String testClient(String text) throws RemoteException;
     public void setNextPlayer(ClientInterface player ) throws RemoteException;
-    // Moi je pense qu'il faut supprimer cette méthode^^
     public void setPreviousPlayer(ClientInterface player) throws RemoteException;
-    public Card getBottomCardOfNextPlayer() throws RemoteException;
     public boolean getCurrentPlayer() throws RemoteException;
     public void setCurrentPlayer(boolean cur) throws RemoteException;
-    public int getNbCardOfNextPlayer() throws RemoteException;
     public Card getBottomCard() throws RemoteException;
     public int getMyNbcard() throws RemoteException;
     public void setHand(ArrayList<Card> crds) throws RemoteException;
@@ -30,7 +25,6 @@ public interface ClientInterface extends Remote {
 	public ClientInterface getPreviousPlayerInterface() throws RemoteException;
 	public ClientInterface getThirdClientInterface() throws RemoteException;
 	public ArrayList<Card> getPlayerDeck() throws RemoteException;
-	public boolean getIHaveWin() throws RemoteException;
 	public void setIHaveWin(boolean bl) throws RemoteException;
 	public String getName() throws RemoteException;
 
